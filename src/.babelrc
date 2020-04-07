@@ -1,0 +1,15 @@
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    "transform-flow-strip-types",
+    "transform-class-properties",
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/transform-runtime"],
+    [
+      "babel-plugin-dotenv",
+      {
+        "replacedModuleName": "babel-dotenv"
+      }
+    ]
+  ]
+}
