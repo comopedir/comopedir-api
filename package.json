@@ -2,14 +2,43 @@
   "name": "comopedir-api",
   "version": "1.0.0",
   "description": "Como pedir GraphQL API.",
-  "main": "index.js",
   "repository": "git@github.com:comopedir/comopedir-api.git",
   "author": "Nandico Aquino <nandico@gmail.com>",
   "license": "MIT",
   "private": false,
+  "type": "module",
+  "scripts": {
+    "start": "NODE_ENV=local nodemon --exec babel-node src/server.js"
+  },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@types/node": "^13.11.0",
+    "babel-node": "^0.0.1-security",
+    "babel-plugin-dotenv": "^0.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "dotenv": "^8.2.0",
     "knex": "^0.20.13",
-    "pg": "^8.0.0"
+    "nodemon": "^2.0.2",
+    "pg": "^8.0.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.8.7",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dataloader": "^2.0.0",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^15.0.0",
+    "graphql-relay": "^0.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "pretty-error": "^2.1.1",
+    "ts-node": "^8.8.2"
   }
 }
