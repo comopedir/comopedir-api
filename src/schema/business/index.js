@@ -1,14 +1,8 @@
 import { globalIdField } from 'graphql-relay';
-import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 
 import NetworkType from '../network'
-
-export const inputFields = {
-  network: { type: GraphQLString },
-  slug: { type: new GraphQLNonNull(GraphQLString) },
-  name: { type: new GraphQLNonNull(GraphQLString) },
-};
-
+import AddressType from '../address'
 
 export default new GraphQLObjectType({
   name: 'Business',
@@ -29,6 +23,12 @@ export default new GraphQLObjectType({
     },
     name: {
       type: new GraphQLNonNull(GraphQLString),
+    },
+    addresses: {
+      type: new GraphQLList(AddressType),
+      resolve(parent, _args, context) {
+        return context.addressesByBusinessId.load(parent.id);
+      },
     },
     createdAt: {
       type: new GraphQLNonNull(GraphQLString),

@@ -1,22 +1,14 @@
 import { globalIdField } from 'graphql-relay';
-import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
-
-export const inputFields = {
-  street: { type: new GraphQLNonNull(GraphQLString) },
-  streetNumber: { type: new GraphQLNonNull(GraphQLString) },
-  complement: { type: GraphQLString },
-  district: { type: new GraphQLNonNull(GraphQLString) },
-  city: { type: new GraphQLNonNull(GraphQLString) },
-  state: { type: new GraphQLNonNull(GraphQLString) },
-  zipCode: { type: new GraphQLNonNull(GraphQLString) },
-  country: { type: new GraphQLNonNull(GraphQLString) },
-};
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLBoolean, GraphQLFloat } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'Address',
   
   fields: () => ({
     id: globalIdField(),
+    latitude: { type: GraphQLFloat },
+    longitude: { type: GraphQLFloat },
+    current: { type: GraphQLBoolean },
     street: { type: new GraphQLNonNull(GraphQLString) },
     streetNumber: {
       type: new GraphQLNonNull(GraphQLString),

@@ -10,11 +10,6 @@ import { globalIdField } from 'graphql-relay';
 import { nodeInterface } from '../node';
 import TranslationType from '../translation';
 
-export const inputFields = {
-  slug: { type: new GraphQLNonNull(GraphQLString) },
-  priority: { type: new GraphQLNonNull(GraphQLInt) },
-};
-
 export default new GraphQLObjectType({
   name: 'Category',
   interfaces: [nodeInterface],
@@ -32,7 +27,7 @@ export default new GraphQLObjectType({
     },
     translations: {
       type: new GraphQLList(TranslationType),
-      resolve(parent, args, { translationsByCategoryId }) {
+      resolve(parent, _args, { translationsByCategoryId }) {
         return translationsByCategoryId.load(parent.id);
       },
     },

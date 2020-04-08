@@ -1,14 +1,21 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import BusinessController from '../../controllers/BusinessController';
+import { GraphQLNonNull, GraphQLString } from 'graphql';
 
-import type, { inputFields } from './index';
+import BusinessController from '../../controllers/BusinessController';
 import isValid from './validate';
+import type from './index'
+
+export const businessInputFields = {
+  network: { type: GraphQLString },
+  slug: { type: new GraphQLNonNull(GraphQLString) },
+  name: { type: new GraphQLNonNull(GraphQLString) },
+};
 
 const createBusiness = mutationWithClientMutationId({
   name: 'CreateBusiness',
-  inputFields,
+  inputFields: businessInputFields,
   outputFields: { business: { type } },
-  mutateAndGetPayload: async (input, context) => {
+  mutateAndGetPayload: async (input, _context) => {
     await isValid(input);
     return BusinessController.create(input);
   },

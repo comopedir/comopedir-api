@@ -55,6 +55,15 @@ class Context {
       .then(mapToMany(keys, x => x.category)),
   );
 
+  addressesByBusinessId = new DataLoader(keys =>
+    db
+      .table('address')
+      .whereIn('business', keys)
+      .orderBy('created_at', 'desc')
+      .select()
+      .then(mapToMany(keys, x => x.business)),
+  );
+
   // death line
 
   accountById = new DataLoader(keys =>
@@ -71,14 +80,6 @@ class Context {
       .whereIn('phone_number', keys)
       .select()
       .then(mapTo(keys, x => x.phoneNumber)),
-  );
-
-  addressByBusiness = new DataLoader(keys =>
-    db
-      .table('address')
-      .whereIn('business', keys)
-      .select()
-      .then(mapTo(keys, x => x.person)),
   );
 
   userById = new DataLoader(keys =>
