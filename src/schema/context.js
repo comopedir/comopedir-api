@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 import { fromGlobalId } from 'graphql-relay';
 
 import db from '../services/db';
-import { mapTo } from '../utils';
+import { mapTo, mapToMany } from '../utils';
 import { UnauthorizedError } from '../errors';
 
 class Context {
@@ -44,6 +44,15 @@ class Context {
       .whereIn('id', keys)
       .select()
       .then(mapTo(keys, x => x.id)),
+  );
+
+  translationsByCategoryId = new DataLoader(keys =>
+    db
+      .table('category_translation')
+      .join('translation', 'category_translation.translation', 'translation.id')
+      .whereIn('category', keys)
+      .select()
+      .then(mapToMany(keys, x => x.category)),
   );
 
   // death line

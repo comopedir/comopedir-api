@@ -7,6 +7,7 @@ import businessQueries from './business/queries';
 
 import addressMutation from './address/mutation';
 import businessMutation from './business/mutation';
+import categoryMutation from './category/mutation';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -23,6 +24,7 @@ export default new GraphQLSchema({
     fields: {
       ...addressMutation,
       ...businessMutation,
+      ...categoryMutation,
     },
   }),
 });
