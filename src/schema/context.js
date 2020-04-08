@@ -55,6 +55,15 @@ class Context {
       .then(mapToMany(keys, x => x.category)),
   );
 
+  translationsByServiceId = new DataLoader(keys =>
+    db
+      .table('service_translation')
+      .join('translation', 'service_translation.translation', 'translation.id')
+      .whereIn('service', keys)
+      .select()
+      .then(mapToMany(keys, x => x.service)),
+  );
+
   addressesByBusinessId = new DataLoader(keys =>
     db
       .table('address')
@@ -62,6 +71,38 @@ class Context {
       .orderBy('created_at', 'desc')
       .select()
       .then(mapToMany(keys, x => x.business)),
+  );
+
+  categoryById = new DataLoader(keys =>
+    db
+      .table('category')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  serviceById = new DataLoader(keys =>
+    db
+      .table('service')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  languageById = new DataLoader(keys =>
+    db
+      .table('language')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  translationById = new DataLoader(keys =>
+    db
+      .table('translation')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
   );
 
   // death line
@@ -85,30 +126,6 @@ class Context {
   userById = new DataLoader(keys =>
     db
       .table('users')
-      .whereIn('id', keys)
-      .select()
-      .then(mapTo(keys, x => x.id)),
-  );
-
-  categoryById = new DataLoader(keys =>
-    db
-      .table('category')
-      .whereIn('id', keys)
-      .select()
-      .then(mapTo(keys, x => x.id)),
-  );
-
-  languageById = new DataLoader(keys =>
-    db
-      .table('language')
-      .whereIn('id', keys)
-      .select()
-      .then(mapTo(keys, x => x.id)),
-  );
-
-  translationById = new DataLoader(keys =>
-    db
-      .table('translation')
       .whereIn('id', keys)
       .select()
       .then(mapTo(keys, x => x.id)),
