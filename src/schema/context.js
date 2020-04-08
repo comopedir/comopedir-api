@@ -104,6 +104,14 @@ class Context {
       .select()
       .then(mapTo(keys, x => x.id)),
   );
+  
+  channelById = new DataLoader(keys =>
+    db
+      .table('channel')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
 
   // death line
 
