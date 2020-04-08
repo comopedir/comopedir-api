@@ -64,6 +64,15 @@ class Context {
       .then(mapToMany(keys, x => x.service)),
   );
 
+  translationsByPaymentTypeId = new DataLoader(keys =>
+    db
+      .table('payment_type_translation')
+      .join('translation', 'payment_type_translation.translation', 'translation.id')
+      .whereIn('payment_type', keys)
+      .select()
+      .then(mapToMany(keys, x => x.payment_type)),
+  );
+
   addressesByBusinessId = new DataLoader(keys =>
     db
       .table('address')

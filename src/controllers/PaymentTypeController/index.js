@@ -1,28 +1,28 @@
 import db from '../../services/db';
 
-const NetworkController = {
+const PaymentTypeController = {
   getByParam: async (key, value) =>
     db
-      .table('network')
+      .table('payment_type')
       .where(key, '=', value)
       .returning('*')
       .then(rows => rows[0]),
 
   create: async (input) => {
     try {
-      const network = await db
-        .table('network')
+      const paymentType = await db
+        .table('payment_type')
         .insert({
           slug: input.slug,
-          name: input.name,
+          priority: input.priority,
         })
         .returning('*')
         .then(rows => rows[0]);
 
-      return { network: { ...network } };
+      return { paymentType: { ...paymentType } };
     } catch (err) {
       return err;
     }
   },
 };
-export default NetworkController;
+export default PaymentTypeController;
