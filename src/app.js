@@ -41,7 +41,9 @@ app.use(
     context: new Context(req),
     graphiql: process.env.NODE_ENV !== 'production',
     pretty: process.env.NODE_ENV !== 'production',
-    formatError: (error) => {
+    customFormatErrorFn: (error) => {
+      console.log(error);
+
       errors.report(error.originalError || error);
       return {
         message: error.message,

@@ -30,6 +30,24 @@ class Context {
     return true;
   }
 
+  networkById = new DataLoader(keys =>
+    db
+      .table('network')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  businessById = new DataLoader(keys =>
+    db
+      .table('business')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  // death line
+
   accountById = new DataLoader(keys =>
     db
       .table('account')
