@@ -83,6 +83,15 @@ class Context {
       .then(mapToMany(keys, x => x.business)),
   );
 
+  businessChannelsByBusinessId = new DataLoader(keys =>
+    db
+      .table('business_channel')
+      .join('channel', 'business_channel.channel', 'channel.id')
+      .whereIn('business', keys)
+      .select()
+      .then(mapToMany(keys, x => x.business)),
+  );
+
   addressesByBusinessId = new DataLoader(keys =>
     db
       .table('address')

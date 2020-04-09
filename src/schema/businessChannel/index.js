@@ -1,11 +1,11 @@
 import { globalIdField } from 'graphql-relay';
-import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
 
 import BusinessType from '../business'
-import CategoryType from '../category'
+import ChannelType from '../channel'
 
 export default new GraphQLObjectType({
-  name: 'BusinessCategory',
+  name: 'BusinessChannel',
   
   fields: () => ({
     id: globalIdField(),
@@ -15,11 +15,14 @@ export default new GraphQLObjectType({
         return businessById.load(parent.business);
       },
     },
-    category: {
-      type: new GraphQLNonNull(CategoryType),
-      resolve(parent, _args, { categoryById }) {
-        return categoryById.load(parent.category);
+    channel: {
+      type: new GraphQLNonNull(ChannelType),
+      resolve(parent, _args, { channelById }) {
+        return channelById.load(parent.channel);
       },
+    },
+    value: {
+      type: new GraphQLNonNull(GraphQLString),
     },
   }),
 });

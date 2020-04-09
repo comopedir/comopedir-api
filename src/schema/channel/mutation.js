@@ -2,8 +2,9 @@ import { mutationWithClientMutationId } from 'graphql-relay';
 import { GraphQLNonNull, GraphQLString, GraphQLInt } from 'graphql';
 import ChannelController from '../../controllers/ChannelController';
 
-import isValid from './validate';
-import type from './index'
+import { isCreateValid, isAssociateValid } from './validate';
+import ChannelType from './index';
+import BusinessChannelType from '../businessChannel';
 
 export const channelInputFields = {
   name: { type: new GraphQLNonNull(GraphQLString) },
@@ -12,13 +13,30 @@ export const channelInputFields = {
 const createChannel = mutationWithClientMutationId({
   name: 'CreateChannel',
   inputFields: channelInputFields,
-  outputFields: { channel: { type } },
+  outputFields: { channel: { type: ChannelType } },
   mutateAndGetPayload: async (input, _context) => {
-    await isValid(input);
+    await isCreateValid(input);
     return ChannelController.create(input);
+  },
+});
+
+export const associateChannelInputFields = {
+  business: { type: new GraphQLNonNull(GraphQLString) },
+  channel: { type: new GraphQLNonNull(GraphQLString) },
+  value: { type: new GraphQLNonNull(GraphQLString) },
+};
+
+const associateChannel = mutationWithClientMutationId({
+  name: 'AssociateChannel',
+  inputFields: associateChannelInputFields,
+  outputFields: { businessChannel: { type: BusinessChannelType } },
+  mutateAndGetPayload: async (input, _context) => {
+    await isAssociateValid(input);
+    return ChannelController.associate(input);
   },
 });
 
 export default {
   createChannel,
+  associateChannel,
 };
