@@ -1,14 +1,12 @@
 import { globalIdField } from 'graphql-relay';
-import { GraphQLObjectType, GraphQLNonNull, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 
-import NetworkType from '../network'
-
-export const inputFields = {
-  network: { type: GraphQLString },
-  slug: { type: new GraphQLNonNull(GraphQLString) },
-  name: { type: new GraphQLNonNull(GraphQLString) },
-};
-
+import NetworkType from '../network';
+import AddressType from '../address';
+import CategoryType from '../category';
+import BusinessChannelType from '../businessChannel';
+import ServiceType from '../service';
+import PaymentTypeType from '../paymentType';
 
 export default new GraphQLObjectType({
   name: 'Business',
@@ -29,6 +27,36 @@ export default new GraphQLObjectType({
     },
     name: {
       type: new GraphQLNonNull(GraphQLString),
+    },
+    addresses: {
+      type: new GraphQLList(AddressType),
+      resolve(parent, _args, context) {
+        return context.addressesByBusinessId.load(parent.id);
+      },
+    },
+    categories: {
+      type: new GraphQLList(CategoryType),
+      resolve(parent, _args, context) {
+        return context.categoriesByBusinessId.load(parent.id);
+      },
+    },
+    channels: {
+      type: new GraphQLList(BusinessChannelType),
+      resolve(parent, _args, context) {
+        return context.businessChannelsByBusinessId.load(parent.id);
+      },
+    },
+    services: {
+      type: new GraphQLList(ServiceType),
+      resolve(parent, _args, context) {
+        return context.servicesByBusinessId.load(parent.id);
+      },
+    },
+    paymentTypes: {
+      type: new GraphQLList(PaymentTypeType),
+      resolve(parent, _args, context) {
+        return context.paymentTypesByBusinessId.load(parent.id);
+      },
     },
     createdAt: {
       type: new GraphQLNonNull(GraphQLString),

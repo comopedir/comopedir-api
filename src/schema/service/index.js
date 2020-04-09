@@ -11,7 +11,7 @@ import { nodeInterface } from '../node';
 import TranslationType from '../translation';
 
 export default new GraphQLObjectType({
-  name: 'Category',
+  name: 'Service',
   interfaces: [nodeInterface],
   
   fields: () => ({
@@ -27,8 +27,8 @@ export default new GraphQLObjectType({
     },
     translations: {
       type: new GraphQLList(TranslationType),
-      resolve(parent, _args, { translationsByCategoryId }) {
-        return translationsByCategoryId.load(parent.id);
+      resolve(parent, _args, { translationsByServiceId }) {
+        return translationsByServiceId.load(parent.id);
       },
     },
   }),

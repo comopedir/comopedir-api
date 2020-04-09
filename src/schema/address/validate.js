@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
+  latitude: yup.number().nullable(),
+  longitude: yup.number().nullable(),
   city: yup.string().required(),
   complement: yup.string(),
   district: yup.string().required(),

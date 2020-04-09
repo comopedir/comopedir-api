@@ -1,4 +1,8 @@
+import { fromGlobalId } from 'graphql-relay';
+
 import db from '../../services/db';
+
+import BusinessController from '../BusinessController';
 
 const AddressController = {
   getByParam: async (key, value) =>
@@ -8,29 +12,31 @@ const AddressController = {
       .returning('*')
       .then(rows => rows[0]),
 
-  create: async (input, { accountId }) => {
+  create: async (input) => {
     try {
-      const person = await PersonController.getByParam('account', accountId);
-      if (!person) throw new Error('person not exist');
 
-      const lastAddress = await db
-        .table('address')
-        .where('person', person.id)
-        .orderBy('created_at', 'desc')
-        .limit(1)
-        .then(rows => rows[0]);
+      let business;
 
-      if (lastAddress) {
-        await db
-          .table('address')
-          .where({ id: lastAddress.id })
-          .update({ active: false });
+      if (input.business) {
+        business = await BusinessController.getByParam(
+          'id', 
+          fromGlobalId(input.business).id
+        );
       }
+
+      if (!business) {
+        throw new Error('Business not found.')
+      }
+
+      await db
+        .table('address')
+        .where('business', business.id)
+        .update({ current: false });
 
       const address = await db
         .table('address')
         .insert({
-          person: person.id,
+          business: business.id,
           street: input.street,
           street_number: input.streetNumber,
           complement: input.complement,
@@ -39,11 +45,13 @@ const AddressController = {
           state: input.state,
           zip_code: input.zipCode,
           country: input.country,
+          latitude: input.latitude,
+          longitude: input.longitude,
         })
         .returning('*')
         .then(rows => rows[0]);
 
-      return { address: { ...address, person } };
+      return { address: { ...address } };
     } catch (err) {
       return err;
     }
