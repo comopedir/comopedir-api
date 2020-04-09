@@ -73,6 +73,16 @@ class Context {
       .then(mapToMany(keys, x => x.payment_type)),
   );
 
+  categoriesByBusinessId = new DataLoader(keys =>
+    db
+      .table('business_category')
+      .join('category', 'business_category.category', 'category.id')
+      .whereIn('business', keys)
+      .orderBy('priority', 'desc')
+      .select()
+      .then(mapToMany(keys, x => x.business)),
+  );
+
   addressesByBusinessId = new DataLoader(keys =>
     db
       .table('address')

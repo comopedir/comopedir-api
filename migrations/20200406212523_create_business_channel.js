@@ -1,5 +1,5 @@
 module.exports.up = async db => {
-  await db.schema.createTable('business_channel_config', table => {
+  await db.schema.createTable('business_channel', table => {
     table
       .uuid('id')
       .notNullable()
@@ -15,12 +15,12 @@ module.exports.up = async db => {
       .references('id')
       .inTable('channel')
       .notNullable();
-    table.string('config', 100);
+    table.string('value', 100);
   });
 };
 
 module.exports.down = async db => {
-  await db.schema.dropTableIfExists('business_channel_config');
+  await db.schema.dropTableIfExists('business_channel');
 };
 
 module.exports.configuration = { transaction: true };

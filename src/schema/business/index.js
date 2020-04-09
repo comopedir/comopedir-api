@@ -1,8 +1,9 @@
 import { globalIdField } from 'graphql-relay';
 import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 
-import NetworkType from '../network'
-import AddressType from '../address'
+import NetworkType from '../network';
+import AddressType from '../address';
+import CategoryType from '../category';
 
 export default new GraphQLObjectType({
   name: 'Business',
@@ -30,6 +31,12 @@ export default new GraphQLObjectType({
         return context.addressesByBusinessId.load(parent.id);
       },
     },
+    categories: {
+      type: new GraphQLList(CategoryType),
+      resolve(parent, _args, context) {
+        return context.categoriesByBusinessId.load(parent.id);
+      },
+    },  
     createdAt: {
       type: new GraphQLNonNull(GraphQLString),
       resolve(parent) {
