@@ -93,6 +93,16 @@ class Context {
       .then(mapToMany(keys, x => x.business)),
   );
 
+  paymentTypesByBusinessId = new DataLoader(keys =>
+    db
+      .table('business_payment_type')
+      .join('payment_type', 'business_payment_type.payment_type', 'payment_type.id')
+      .whereIn('business', keys)
+      .orderBy('priority', 'desc')
+      .select()
+      .then(mapToMany(keys, x => x.business)),
+  );
+
   businessChannelsByBusinessId = new DataLoader(keys =>
     db
       .table('business_channel')
@@ -146,6 +156,14 @@ class Context {
   channelById = new DataLoader(keys =>
     db
       .table('channel')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  paymentTypeById = new DataLoader(keys =>
+    db
+      .table('payment_type')
       .whereIn('id', keys)
       .select()
       .then(mapTo(keys, x => x.id)),
