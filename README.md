@@ -48,7 +48,7 @@ for migrations.
 
 This project is inspired in some architectural aspects from 
 [Node.js API Starter Kit](https://github.com/kriasoft/nodejs-api-starter), 
-using some code of the
+using some code of the original project. 
 
 [node]: https://nodejs.org
 [ts]: https://typescriptlang.org/
