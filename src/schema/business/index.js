@@ -5,6 +5,7 @@ import NetworkType from '../network';
 import AddressType from '../address';
 import CategoryType from '../category';
 import BusinessChannelType from '../businessChannel';
+import ServiceType from '../service';
 
 export default new GraphQLObjectType({
   name: 'Business',
@@ -42,6 +43,12 @@ export default new GraphQLObjectType({
       type: new GraphQLList(BusinessChannelType),
       resolve(parent, _args, context) {
         return context.businessChannelsByBusinessId.load(parent.id);
+      },
+    },
+    services: {
+      type: new GraphQLList(ServiceType),
+      resolve(parent, _args, context) {
+        return context.servicesByBusinessId.load(parent.id);
       },
     },
     createdAt: {
