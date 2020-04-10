@@ -1,4 +1,5 @@
-import { GraphQLNonNull, GraphQLInt } from 'graphql';
+import { fromGlobalId } from 'graphql-relay';
+import { GraphQLNonNull, GraphQLInt, GraphQLString } from 'graphql';
 import {
   connectionDefinitions,
   forwardConnectionArgs,
@@ -8,6 +9,35 @@ import {
 
 import db from '../../services/db';
 import BusinessType from './index';
+
+import BusinessController from '../../controllers/BusinessController';
+
+const business = {
+  type: BusinessType,
+  args: {
+    id: {
+      type: GraphQLString,
+    },
+  },
+  async resolve(_root, args, context) {
+    const { id } = args;
+
+    let business;
+
+    if (id) {
+      business = await BusinessController.getByParam(
+        'id', 
+        fromGlobalId(id).id
+      );
+    }
+
+    if (!business) {
+      throw new Error('Business not found.');
+    }
+
+    return context.businessById.load(business.id);
+  },
+};
 
 const businesses = {
   type: connectionDefinitions({
@@ -49,4 +79,5 @@ const businesses = {
 
 export default {
   businesses,
+  business,
 };
