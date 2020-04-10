@@ -16,6 +16,7 @@ import serviceMutation from './service/mutation';
 import channelMutation from './channel/mutation';
 import networkMutation from './network/mutation';
 import paymentTypeMutation from './paymentType/mutation';
+import pictureMutation from './picture/mutation';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -41,6 +42,7 @@ export default new GraphQLSchema({
       ...channelMutation,
       ...networkMutation,
       ...paymentTypeMutation,
+      ...pictureMutation,
     },
   }),
 });

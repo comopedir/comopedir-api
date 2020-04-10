@@ -1,11 +1,19 @@
 import { globalIdField } from 'graphql-relay';
 import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLBoolean, GraphQLFloat } from 'graphql';
 
+import BusinessType from '../business';
+
 export default new GraphQLObjectType({
   name: 'Address',
   
   fields: () => ({
     id: globalIdField(),
+    business: {
+      type: new GraphQLNonNull(BusinessType),
+      resolve(parent, _args, { businessById }) {
+        return businessById.load(parent.business);
+      },
+    },
     latitude: { type: GraphQLFloat },
     longitude: { type: GraphQLFloat },
     current: { type: GraphQLBoolean },
