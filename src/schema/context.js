@@ -121,6 +121,15 @@ class Context {
       .then(mapToMany(keys, x => x.business)),
   );
 
+  picturesByBusinessId = new DataLoader(keys =>
+    db
+      .table('picture')
+      .whereIn('business', keys)
+      .orderBy('created_at', 'desc')
+      .select()
+      .then(mapToMany(keys, x => x.business)),
+  );
+
   categoryById = new DataLoader(keys =>
     db
       .table('category')
@@ -156,6 +165,22 @@ class Context {
   channelById = new DataLoader(keys =>
     db
       .table('channel')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  pictureById = new DataLoader(keys =>
+    db
+      .table('picture')
+      .whereIn('id', keys)
+      .select()
+      .then(mapTo(keys, x => x.id)),
+  );
+
+  pictureFileById = new DataLoader(keys =>
+    db
+      .table('picture_file')
       .whereIn('id', keys)
       .select()
       .then(mapTo(keys, x => x.id)),

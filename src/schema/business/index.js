@@ -7,6 +7,7 @@ import CategoryType from '../category';
 import BusinessChannelType from '../businessChannel';
 import ServiceType from '../service';
 import PaymentTypeType from '../paymentType';
+import PictureType from '../picture';
 
 export default new GraphQLObjectType({
   name: 'Business',
@@ -56,6 +57,12 @@ export default new GraphQLObjectType({
       type: new GraphQLList(PaymentTypeType),
       resolve(parent, _args, context) {
         return context.paymentTypesByBusinessId.load(parent.id);
+      },
+    },
+    pictures: {
+      type: new GraphQLList(PictureType),
+      resolve(parent, _args, context) {
+        return context.picturesByBusinessId.load(parent.id);
       },
     },
     createdAt: {
