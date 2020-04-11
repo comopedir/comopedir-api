@@ -194,6 +194,14 @@ class Context {
       .then(mapTo(keys, x => x.id)),
   );
 
+  personByAccount = new DataLoader(keys =>
+    db
+      .table('person')
+      .whereIn('account', keys)
+      .select()
+      .then(mapTo(keys, x => x.account)),
+  );
+
   // death line
 
   accountById = new DataLoader(keys =>
