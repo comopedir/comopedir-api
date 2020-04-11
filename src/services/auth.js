@@ -4,13 +4,13 @@ import { toGlobalId } from 'graphql-relay';
 
 const authConfig = {
   secret: process.env.SESSION_SECRET,
-  expiresIn: 1000 * 60 * 60 * 4, // 4hrs
+  expiresIn: 86400 * 10, // 10 days
 };
 
 const roles = {
   guest: 'guest',
-  seller: 'seller',
   user: 'user',
+  admin: 'admin',
 };
 
 const checkToken = async req => {
