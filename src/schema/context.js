@@ -9,8 +9,6 @@ import { UnauthorizedError } from '../errors';
 class Context {
   request;
   userLogged;
-  atb;
-  allTables;
 
   constructor(request) {
     this.request = request;
