@@ -2,6 +2,7 @@ import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 
 import { nodeField, nodesField } from './node';
 
+import airtableBusinessQueries from './airtableBusiness/queries';
 import categoryQueries from './category/queries';
 import serviceQueries from './service/queries';
 import businessQueries from './business/queries';
@@ -27,6 +28,7 @@ export default new GraphQLSchema({
     fields: {
       node: nodeField,
       nodes: nodesField,
+      ...airtableBusinessQueries,
       ...categoryQueries,
       ...businessQueries,
       ...serviceQueries,

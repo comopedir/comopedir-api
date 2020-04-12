@@ -2,12 +2,15 @@ import DataLoader from 'dataloader';
 import { fromGlobalId } from 'graphql-relay';
 
 import db from '../services/db';
+
 import { mapTo, mapToMany } from '../utils';
 import { UnauthorizedError } from '../errors';
 
 class Context {
   request;
   userLogged;
+  atb;
+  allTables;
 
   constructor(request) {
     this.request = request;
