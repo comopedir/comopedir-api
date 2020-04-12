@@ -203,27 +203,17 @@ class Context {
       .then(mapTo(keys, x => x.account)),
   );
 
-  // death line
-
-  accountById = new DataLoader(keys =>
+  personById = new DataLoader(keys =>
     db
-      .table('account')
+      .table('person')
       .whereIn('id', keys)
       .select()
       .then(mapTo(keys, x => x.id)),
   );
 
-  accountByPhoneNumber = new DataLoader(keys =>
+  accountById = new DataLoader(keys =>
     db
       .table('account')
-      .whereIn('phone_number', keys)
-      .select()
-      .then(mapTo(keys, x => x.phoneNumber)),
-  );
-
-  userById = new DataLoader(keys =>
-    db
-      .table('users')
       .whereIn('id', keys)
       .select()
       .then(mapTo(keys, x => x.id)),
