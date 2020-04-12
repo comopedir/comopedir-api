@@ -4,7 +4,7 @@ import { inputFields, outputFields } from './index';
 import isValid from './validate';
 
 const auth = mutationWithClientMutationId({
-  name: 'auth',
+  name: 'Auth',
   inputFields,
   outputFields,
   mutateAndGetPayload: async input => {
