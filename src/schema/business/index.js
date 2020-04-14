@@ -23,6 +23,12 @@ export default new GraphQLObjectType({
         return null;
       },
     },
+    airtableId: {
+      type: GraphQLString,
+      resolve(parent) {
+        return parent.airtable_id;
+      },
+    },
     slug: {
       type: new GraphQLNonNull(GraphQLString),
     },
