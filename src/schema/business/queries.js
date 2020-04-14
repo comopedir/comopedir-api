@@ -18,9 +18,12 @@ const business = {
     id: {
       type: GraphQLString,
     },
+    airtableId: {
+      type: GraphQLString,
+    },
   },
   async resolve(_root, args, context) {
-    const { id } = args;
+    const { id, airtableId } = args;
 
     let business;
 
@@ -29,13 +32,29 @@ const business = {
         'id', 
         fromGlobalId(id).id
       );
+      
+      if (!business) {
+        throw new Error('Business not found.');
+      }
+
+      return context.businessById.load(business.id);
     }
 
-    if (!business) {
-      throw new Error('Business not found.');
+    if (airtableId) {
+      business = await BusinessController.getByParam(
+        'airtable_id', 
+        airtableId
+      );
+      
+      if (!business) {
+        return null
+      }
+      else {
+        return context.businessById.load(business.id);
+      }
     }
-
-    return context.businessById.load(business.id);
+    
+    return null;
   },
 };
 
