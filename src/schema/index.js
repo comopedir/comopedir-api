@@ -11,6 +11,7 @@ import networkQueries from './network/queries';
 import paymentTypeQueries from './paymentType/queries';
 import accountQueries from './account/queries';
 
+import airtableBusinessMutation from './airtableBusiness/mutation';
 import sessionMutation from './session/mutation';
 import addressMutation from './address/mutation';
 import businessMutation from './business/mutation';
@@ -41,6 +42,7 @@ export default new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: {
+      ...airtableBusinessMutation,
       ...sessionMutation,
       ...addressMutation,
       ...businessMutation,
