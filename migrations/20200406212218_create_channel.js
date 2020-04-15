@@ -6,6 +6,9 @@ module.exports.up = async db => {
       .defaultTo(db.raw('uuid_generate_v1mc()'))
       .primary();
     table.string('name', 100).notNullable();
+    table.string('slug', 100)
+    .unique()
+    .notNullable();
   });
 };
 

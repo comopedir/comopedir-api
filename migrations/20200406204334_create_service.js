@@ -5,7 +5,9 @@ module.exports.up = async db => {
       .notNullable()
       .defaultTo(db.raw('uuid_generate_v1mc()'))
       .primary();
-    table.string('slug', 100).notNullable();
+    table.string('slug', 100)
+      .unique()
+      .notNullable();
     table
       .integer('priority')
       .notNullable()
