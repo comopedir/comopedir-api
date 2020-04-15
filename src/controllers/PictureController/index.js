@@ -13,15 +13,16 @@ const PictureController = {
       .returning('*')
       .then(rows => rows[0]),
 
-  createFromUrl: async (input) => {
+  createFromUrl: async (input, TransactionDB) => {
+    const trx = TransactionDB || (await db.transaction());
     try {
-
       let business;
 
       if (input.business) {
-        business = await BusinessController.getByParam(
+        business = await BusinessController.getByParamWithTransaction(
           'id', 
-          fromGlobalId(input.business).id
+          fromGlobalId(input.business).id,
+          trx
         );
       }
 
@@ -46,6 +47,7 @@ const PictureController = {
     
       let picture = await db
         .table('picture')
+        .transacting(trx)
         .insert({
           business: business.id,
           type: rawData.mediaType,
@@ -56,6 +58,7 @@ const PictureController = {
 
       const rawPictureFile = await db
         .table('picture_file')
+        .transacting(trx)
         .insert({
           url: rawData.url,
           size: rawData.size,
@@ -67,6 +70,7 @@ const PictureController = {
 
       const smallPictureFile = await db
         .table('picture_file')
+        .transacting(trx)
         .insert({
           url: smallData.url,
           size: smallData.size,
@@ -78,6 +82,7 @@ const PictureController = {
 
       const largePictureFile = await db
         .table('picture_file')
+        .transacting(trx)
         .insert({
           url: largeData.url,
           size: largeData.size,
@@ -89,6 +94,7 @@ const PictureController = {
         
       picture = await db
         .table('picture')
+        .transacting(trx)
         .update({
           raw: rawPictureFile.id,
           small: smallPictureFile.id,
@@ -100,8 +106,12 @@ const PictureController = {
         .returning('*')
         .then(rows => rows[0]);
 
+      if (!TransactionDB) await trx.commit();
+
       return { picture: { ...picture } };
     } catch (err) {
+      console.log(err);
+      trx.rollback();
       return err;
     }
   },

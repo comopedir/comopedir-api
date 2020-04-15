@@ -16,7 +16,7 @@ module.exports.up = async db => {
       .defaultTo(100);
     table.string('type', 100);
     table.string('description', 255);
-    table.string('origin_id', 100);
+    table.string('origin_id', 255);
     table
       .uuid('raw')
       .references('id')

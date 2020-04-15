@@ -8,6 +8,7 @@ import BusinessChannelType from '../businessChannel';
 
 export const channelInputFields = {
   name: { type: new GraphQLNonNull(GraphQLString) },
+  slug: { type: new GraphQLNonNull(GraphQLString) }
 };
 
 const createChannel = mutationWithClientMutationId({

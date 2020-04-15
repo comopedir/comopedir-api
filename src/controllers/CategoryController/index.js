@@ -11,6 +11,14 @@ const CategoryController = {
       .returning('*')
       .then(rows => rows[0]),
 
+  getByParamWithTransaction: async (key, value, TransactionDB) =>
+  db
+    .table('category')
+    .transacting(TransactionDB)
+    .where(key, '=', value)
+    .returning('*')
+    .then(rows => rows[0]),
+
   create: async (input) => {
     try {
       const category = await db
