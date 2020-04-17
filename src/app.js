@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ limit: '300mb', extended: true }));
 app.use(authMiddleware);
 
 app.get('/', (req, res) => {
-  res.type('text/plain').send('Oi :)');
+  res.type('text/plain').send('Olá :)');
   res.status(200);
 });
 
