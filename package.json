@@ -2,7 +2,7 @@
   "name": "comopedir-api",
   "version": "1.0.0",
   "description": "Como pedir GraphQL API.",
-  "repository": "git@github.com:comopedir/comopedir-api.git",
+  "repository": "https://github.com/comopedir/comopedir-api",
   "author": "Nandico Aquino <nandico@gmail.com>",
   "license": "MIT",
   "private": false,
