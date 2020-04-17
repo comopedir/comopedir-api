@@ -110,7 +110,7 @@ const PictureController = {
 
       return { picture: { ...picture } };
     } catch (err) {
-      console.log(err);
+      console.error(err);
       trx.rollback();
       return err;
     }

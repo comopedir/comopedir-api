@@ -12,15 +12,17 @@ const AddressController = {
       .returning('*')
       .then(rows => rows[0]),
 
-  create: async (input) => {
-    try {
+  create: async (input, TransactionDB) => {
+    const trx = TransactionDB || (await db.transaction());
 
+    try {
       let business;
 
       if (input.business) {
-        business = await BusinessController.getByParam(
+        business = await BusinessController.getByParamWithTransaction(
           'id', 
-          fromGlobalId(input.business).id
+          fromGlobalId(input.business).id,
+          trx,
         );
       }
 
@@ -31,10 +33,12 @@ const AddressController = {
       await db
         .table('address')
         .where('business', business.id)
+        .transacting(trx)
         .update({ current: false });
 
       const address = await db
         .table('address')
+        .transacting(trx)
         .insert({
           business: business.id,
           street: input.street,
@@ -51,8 +55,12 @@ const AddressController = {
         .returning('*')
         .then(rows => rows[0]);
 
+      if (!TransactionDB) await trx.commit();
+
       return { address: { ...address } };
     } catch (err) {
+      console.error(err);
+      trx.rollback();
       return err;
     }
   },

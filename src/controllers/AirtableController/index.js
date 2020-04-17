@@ -1,5 +1,6 @@
 import accents from 'remove-accents';
 import { toGlobalId } from 'graphql-relay';
+import { URL } from 'url';
 
 import db from '../../services/db';
 
@@ -7,35 +8,36 @@ import CategoryController from '../CategoryController';
 import ServiceController from '../ServiceController';
 import ChannelController from '../ChannelController';
 import PictureController from '../PictureController';
-
-/*
-{ 
-x  airtableId: 'rec0JVpYXErZXY5wg',
-x  name: 'Restaurante Manu',
-x  services: [ 'Delivery', 'Retirada', 'Gift Card' ],
-x  channels: [ 'DM no Instagram', 'Whatsapp', 'Telefone', 'James Delivery' ],
-x  categories: [ 'Brasileira', 'Ingredientes' ],
-  pictures: 
-   [ { id: 'attvDOJEk1umWlE5Z',
-       url: 'https://dl.airtable.com/.attachments/0a27686efedcbea73a141f5b424b81bf/031de7dc/4.Berinjelacocoebroademilho_CrditoRubensKato.jpg',
-       filename: '4. Berinjela, coco e broa de milho_Crédito Rubens Kato.jpg',
-       size: 16706194,
-       type: 'image/jpeg',
-       thumbnails: [Object] } ],
-  website: [ 'www.restaurantemanu.com.br ' ],
-  whatsapp: null,
-  phone: null,
-  state: 'PR',
-  city: 'Curitiba',
-  instagram: '@restaurantemanu',
-  email: 'reservas@restaurantemanu.com.br',
-  approved: 'Sim' 
-}
-*/
-
+import AddressController from '../AddressController';
 
 const AirtableController = {
   makeSlug: text => accents.remove(text.toLowerCase().replace(/\s/g, "")),
+  formatWebsite: url => {
+    try {
+      let inputUrl = String(url).trim();
+
+      if (!inputUrl.startsWith('https://') && !inputUrl.startsWith('http://')) {
+        inputUrl = `https://${inputUrl}`
+      }
+
+      return new URL(inputUrl).toString();
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  formatPhone: phone => {
+    let inputPhone = String(phone).trim().replace(/[^\d]/g, ''); 
+
+    if (inputPhone.startsWith('0')) {
+      inputPhone = inputPhone.substr(1);
+    }
+
+    if (!inputPhone.startsWith('55')) {
+      inputPhone = `55${inputPhone}`;
+    }
+
+    return inputPhone;
+  },
   createOrAssignCategory: async (businessId, categoryName, TransactionDB) => {
     try {
       const categorySlug = AirtableController.makeSlug(categoryName);
@@ -164,6 +166,24 @@ const AirtableController = {
       throw new Error('Error inserting pictures.');
     }
   },
+  createAddress: async (businessId, state, city, TransactionDB) => {
+    try {
+      const address = {
+        business: toGlobalId('business', businessId),
+        country: 'BRA',
+        state,
+        city,
+      }
+
+      await AddressController.create(address, TransactionDB);
+
+      return Promise.resolve('ok');
+    }
+    catch (err) {
+      console.log(err);
+      throw new Error('Error inserting addresses.');
+    }
+  },
   import: async (input) => {
     const trx = await db.transaction();
 
@@ -224,6 +244,60 @@ const AirtableController = {
       }
 
       console.log('Channels..', input.channels);
+
+      if (input.website) {
+        await AirtableController.createOrAssignChannel(
+          business.id,
+          'website',
+          AirtableController.formatWebsite(input.website),
+          trx
+        );
+      }
+
+      if (input.whatsapp) {
+        await AirtableController.createOrAssignChannel(
+          business.id,
+          'whatsapp',
+          AirtableController.formatPhone(input.whatsapp),
+          trx
+        );
+      }
+
+      if (input.phone) {
+        await AirtableController.createOrAssignChannel(
+          business.id,
+          'phone',
+          AirtableController.formatPhone(input.phone),
+          trx
+        );
+      }
+
+      if (input.instagram) {
+        await AirtableController.createOrAssignChannel(
+          business.id,
+          'instagram',
+          AirtableController.makeSlug(input.instagram),
+          trx
+        );
+      }
+
+      if (input.email) {
+        await AirtableController.createOrAssignChannel(
+          business.id,
+          'email',
+          AirtableController.makeSlug(input.email),
+          trx
+        );
+      }
+
+      if (input.state) {
+        await AirtableController.createAddress(
+          business.id,
+          input.state,
+          input.city,
+          trx
+        );
+      }
 
       if (input.pictures) {
         await Promise.all(
