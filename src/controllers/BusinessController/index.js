@@ -45,5 +45,47 @@ const BusinessController = {
       return err;
     }
   },
+  update: async (input, context) => {
+    await context.isAuthorized(['admin']);
+
+    try {
+      const { businessId, field, value } = input;
+      const dbBusinessId = fromGlobalId(businessId).id;
+
+      let updateField;
+
+      updateField = '';
+
+      let business = await BusinessController.getByParam('id', dbBusinessId);
+      if (!business) throw new Error('Business does not exist.');
+
+      switch (field) {
+        case 'slug':
+          updateField = 'slug';
+          break;
+        case 'name':
+          updateField = 'name';
+          break;
+        default:
+          throw new Error('Access denied.');
+      }
+
+      const updatePayload = {};
+      updatePayload[updateField] = value;
+      updatePayload['updated_at'] = new Date().toUTCString();
+
+      business = await db
+        .table('business')
+        .update(updatePayload)
+        .where({ id: business.id })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      return { business };
+    } catch (err) {
+      console.error(err);
+      throw new Error('Error updating business data.');
+    }
+  },
 };
 export default BusinessController;

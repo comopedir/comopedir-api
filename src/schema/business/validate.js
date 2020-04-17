@@ -6,6 +6,17 @@ const schema = yup.object().shape({
   name: yup.string().required(),
 });
 
-const isValid = obj => schema.validate(obj);
+const isCreateValid = obj => schema.validate(obj);
 
-export default isValid;
+const updateSchema = yup.object().shape({
+  businessId: yup.string().required(),
+  field: yup.string().required(),
+  value: yup.string().required(),
+});
+
+const isUpdateValid = obj => updateSchema.validate(obj);
+
+export {
+  isCreateValid,
+  isUpdateValid,
+};
