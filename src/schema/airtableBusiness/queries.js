@@ -28,7 +28,6 @@ const airtableBusiness = {
         .getTableContents()
         .then(rows => {
           rows.forEach(record => {
-
             if (record['airtableID'] === airtableId) {
               business = {
                 id: record['airtableID'],
@@ -38,7 +37,7 @@ const airtableBusiness = {
                 channels: record['Como Pedir'],
                 categories: record['Categoria'],
                 website: record['Website'],
-                whatsapp: record['whatsapp'],
+                whatsapp: record['WhatsApp'],
                 phone: record['Telefone para Pedidos'],
                 state: record['Estado'],
                 city: record['Cidade'],
@@ -84,7 +83,7 @@ const airtableBusinesses = {
               channels: record['Como Pedir'],
               categories: record['Categoria'],
               website: record['Website'],
-              whatsapp: record['whatsapp'],
+              whatsapp: record['WhatsApp'],
               phone: record['Telefone para Pedidos'],
               state: record['Estado'],
               city: record['Cidade'],
