@@ -10,7 +10,7 @@
   "scripts": {
     "start": "NODE_ENV=local nodemon --exec babel-node src/server.js",
     "clean": "rm -rf build/",
-    "pre-build": "npm run clean && mkdir build && cp package.json build/ && cd build && npm install",
+    "pre-build": "mkdir build && cp package.json build/ && cd build && npm install",
     "build": "npm run pre-build && babel src --out-dir build --source-maps inline --copy-files"
   },
   "devDependencies": {
