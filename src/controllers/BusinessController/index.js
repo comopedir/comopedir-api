@@ -70,9 +70,13 @@ const BusinessController = {
           throw new Error('Access denied.');
       }
 
+      const updatePayload = {};
+      updatePayload[updateField] = value;
+      updatePayload['updated_at'] = new Date().toUTCString();
+
       business = await db
         .table('business')
-        .update(updateField, value)
+        .update(updatePayload)
         .where({ id: business.id })
         .returning('*')
         .then(rows => rows[0]);
