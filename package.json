@@ -20,6 +20,7 @@
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@types/node": "^13.11.0",
+    "babel": "^6.23.0",
     "babel-node": "^0.0.1-security",
     "babel-plugin-dotenv": "^0.1.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
