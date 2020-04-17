@@ -1,0 +1,42 @@
+name: CI/CD - Development
+
+on:
+  push:
+    branches:
+      - development
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Package
+        run: npm run build
+
+      - name: List /Build
+        run: ls ./build
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip ./build
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v1
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ComoPedir
+          environment_name: dev-comopedir
+          version_label: ${{ github.sha }}
+          region: sa-east-1
+          deployment_package: deploy.zip
