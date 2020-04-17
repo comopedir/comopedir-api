@@ -22,7 +22,7 @@ export default new GraphQLObjectType({
       },
     },
     value: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
   }),
 });
