@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "type": "module",
-  "engines": { "node" : "11.10.1" },
+  "engines": { "node" : "10.19.0" },
   "scripts": {
     "start": "NODE_ENV=local nodemon --exec babel-node src/server.js",
     "clean": "rm -rf build/",
