@@ -7,6 +7,7 @@ import expressGraphQL from 'express-graphql';
 import PrettyError from 'pretty-error';
 import { printSchema } from 'graphql';
 
+import errors from './errors';
 import schema from './schema';
 
 import Context from './schema/context';
@@ -47,8 +48,6 @@ app.use(
     graphiql: process.env.NODE_ENV !== 'production',
     pretty: process.env.NODE_ENV !== 'production',
     customFormatErrorFn: (error) => {
-      console.log(error);
-
       errors.report(error.originalError || error);
       return {
         message: error.message,
