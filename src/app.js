@@ -14,8 +14,13 @@ import authMiddleware from './middlewares/authMiddleware';
 
 const app = express();
 
+var corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200,
+}
+
 app.set('trust proxy', 'loopback');
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
