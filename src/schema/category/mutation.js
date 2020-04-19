@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import CategoryController from '../../controllers/CategoryController';
 
 import { isCreateValid, isAssociateValid } from './validate';
@@ -7,11 +7,18 @@ import CategoryType from './index';
 import BusinessCategoryType from '../businessCategory';
 
 export const categoryInputFields = {
-  slug: { type: new GraphQLNonNull(GraphQLString) },
-  priority: { type: new GraphQLNonNull(GraphQLInt) },
+  slug: {
+    description: 'Category slug (url identification).',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  priority: {
+    type: new GraphQLNonNull(GraphQLInt),
+    description: 'Category priority.',
+  },
 };
 
 const createCategory = mutationWithClientMutationId({
+  description: 'Create a category.',
   name: 'CreateCategory',
   inputFields: categoryInputFields,
   outputFields: { category: { type: CategoryType } },
@@ -22,11 +29,18 @@ const createCategory = mutationWithClientMutationId({
 });
 
 export const associateCategoryInputFields = {
-  business: { type: new GraphQLNonNull(GraphQLString) },
-  category: { type: new GraphQLNonNull(GraphQLString) },
+  business: {
+    description: 'Related business ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  category: {
+    description: 'Related category ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
 };
 
 const associateCategory = mutationWithClientMutationId({
+  description: 'Associate a category with a business.',
   name: 'AssociateCategory',
   inputFields: associateCategoryInputFields,
   outputFields: { businessCategory: { type: BusinessCategoryType } },

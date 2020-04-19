@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import ChannelController from '../../controllers/ChannelController';
 
 import { isCreateValid, isAssociateValid } from './validate';
@@ -7,11 +7,18 @@ import ChannelType from './index';
 import BusinessChannelType from '../businessChannel';
 
 export const channelInputFields = {
-  name: { type: new GraphQLNonNull(GraphQLString) },
-  slug: { type: new GraphQLNonNull(GraphQLString) }
+  name: {
+    description: 'Channel name.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  slug: {
+    description: 'Channel slug (url identification).',
+    type: new GraphQLNonNull(GraphQLString),
+  }
 };
 
 const createChannel = mutationWithClientMutationId({
+  description: 'Create a channel.',
   name: 'CreateChannel',
   inputFields: channelInputFields,
   outputFields: { channel: { type: ChannelType } },
@@ -22,12 +29,22 @@ const createChannel = mutationWithClientMutationId({
 });
 
 export const associateChannelInputFields = {
-  business: { type: new GraphQLNonNull(GraphQLString) },
-  channel: { type: new GraphQLNonNull(GraphQLString) },
-  value: { type: new GraphQLNonNull(GraphQLString) },
+  business: {
+    description: 'Related business ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  channel: {
+    description: 'Related channel ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  value: {
+    description: 'Channel specific configuration (url, parameter or other value to supply channel config).',
+    type: new GraphQLNonNull(GraphQLString),
+  },
 };
 
 const associateChannel = mutationWithClientMutationId({
+  description: 'Associate a channel with a business.',
   name: 'AssociateChannel',
   inputFields: associateChannelInputFields,
   outputFields: { businessChannel: { type: BusinessChannelType } },

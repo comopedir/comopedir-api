@@ -4,6 +4,7 @@ import { inputFields, outputFields } from './index';
 import isValid from './validate';
 
 const auth = mutationWithClientMutationId({
+  description: 'Authenticate an account.',
   name: 'Auth',
   inputFields,
   outputFields,

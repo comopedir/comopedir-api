@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLFloat } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLFloat, GraphQLID } from 'graphql';
 
 import AddressController from '../../controllers/AddressController';
 
@@ -7,21 +7,55 @@ import isValid from './validate';
 import type from './index'
 
 export const addressInputFields = {
-  latitude: { type: GraphQLFloat },
-  longitude: { type: GraphQLFloat },
-  business: { type: new GraphQLNonNull(GraphQLString) },
-  street: { type: new GraphQLNonNull(GraphQLString) },
-  streetNumber: { type: new GraphQLNonNull(GraphQLString) },
-  complement: { type: GraphQLString },
-  district: { type: new GraphQLNonNull(GraphQLString) },
-  city: { type: new GraphQLNonNull(GraphQLString) },
-  state: { type: new GraphQLNonNull(GraphQLString) },
-  zipCode: { type: new GraphQLNonNull(GraphQLString) },
-  country: { type: new GraphQLNonNull(GraphQLString) },
+  latitude: {
+    description: 'Address latitude in decimal degress (DD).',
+    type: GraphQLFloat, 
+  },
+  longitude: {
+    description: 'Address longitude in decimal degress (DD).',
+    type: GraphQLFloat,
+  },
+  business: {
+    description: 'Related business.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  street: {
+    description: 'Address street.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  streetNumber: {
+    description: 'Address street number.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  complement: {
+    description: 'Address complement.',
+    type: GraphQLString,
+  },
+  district: {
+    description: 'Address district.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  city: {
+    description: 'Address city.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  state: {
+    description: 'Address state.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  zipCode: {
+    description: 'Address zip code.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  country: {
+    description: 'Address country.',
+    type: new GraphQLNonNull(GraphQLString)
+  },
 };
 
 const createAddress = mutationWithClientMutationId({
   name: 'CreateAddress',
+  description: 'Create address for a business.',
   inputFields: addressInputFields,
   outputFields: { address: { type } },
   mutateAndGetPayload: async (input, _context) => {
