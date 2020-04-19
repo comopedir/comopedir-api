@@ -13,6 +13,7 @@ import BusinessType from './index';
 import BusinessController from '../../controllers/BusinessController';
 
 const business = {
+  description: 'Fetches a business given its ID.',
   type: BusinessType,
   args: {
     id: {
@@ -59,6 +60,7 @@ const business = {
 };
 
 const businesses = {
+  description: 'Fetches businesses.',
   type: connectionDefinitions({
     name: 'Business',
     nodeType: BusinessType,

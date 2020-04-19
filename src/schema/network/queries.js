@@ -10,6 +10,7 @@ import db from '../../services/db';
 import NetworkType from './index';
 
 const networks = {
+  description: 'Fetches business networks.',
   type: connectionDefinitions({
     name: 'Network',
     nodeType: NetworkType,

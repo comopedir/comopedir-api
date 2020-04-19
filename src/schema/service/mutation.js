@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import ServiceController from '../../controllers/ServiceController';
 
 import { isCreateValid, isAssociateValid } from './validate';
@@ -7,11 +7,18 @@ import ServiceType from './index';
 import BusinessServiceType from '../businessService';
 
 export const serviceInputFields = {
-  slug: { type: new GraphQLNonNull(GraphQLString) },
-  priority: { type: new GraphQLNonNull(GraphQLInt) },
+  slug: {
+    description: 'Service slug (url identification).',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  priority: {
+    description: 'Service priority.',
+    type: new GraphQLNonNull(GraphQLInt),
+  },
 };
 
 const createService = mutationWithClientMutationId({
+  description: 'Create a service',
   name: 'CreateService',
   inputFields: serviceInputFields,
   outputFields: { service: { type: ServiceType } },
@@ -22,11 +29,18 @@ const createService = mutationWithClientMutationId({
 });
 
 export const associateServiceInputFields = {
-  business: { type: new GraphQLNonNull(GraphQLString) },
-  service: { type: new GraphQLNonNull(GraphQLString) },
+  business: {
+    description: 'Related business (ID).',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  service: {
+    description: 'Related service (ID).',
+    type: new GraphQLNonNull(GraphQLID),
+  },
 };
 
 const associateService = mutationWithClientMutationId({
+  description: 'Associate a service with a business.',
   name: 'AssociateService',
   inputFields: associateServiceInputFields,
   outputFields: { businessService: { type: BusinessServiceType } },

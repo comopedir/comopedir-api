@@ -18,5 +18,9 @@ export default new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString),
       description: 'Channel name.',
     },
+    slug: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Channel slug.',
+    },
   }),
 });

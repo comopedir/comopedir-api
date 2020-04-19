@@ -10,6 +10,7 @@ import db from '../../services/db';
 import CategoryType from './index';
 
 const categories = {
+  description: 'Fetches business categories.',
   type: connectionDefinitions({
     name: 'Category',
     nodeType: CategoryType,

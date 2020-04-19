@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import PaymentTypeController from '../../controllers/PaymentTypeController';
 
 import { isCreateValid, isAssociateValid } from './validate';
@@ -7,11 +7,18 @@ import PaymentTypeType from './index';
 import BusinessPaymentTypeType from '../businessPaymentType';
 
 export const paymentTypeInputFields = {
-  slug: { type: new GraphQLNonNull(GraphQLString) },
-  priority: { type: new GraphQLNonNull(GraphQLInt) },
+  slug: {
+    description: 'Payment type slug (url identification).',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  priority: {
+    description: 'Payment type.',
+    type: new GraphQLNonNull(GraphQLInt),
+  },
 };
 
 const createPaymentType = mutationWithClientMutationId({
+  description: 'Create a payment type.',
   name: 'CreatePaymentType',
   inputFields: paymentTypeInputFields,
   outputFields: { paymentType: { type: PaymentTypeType } },
@@ -22,11 +29,18 @@ const createPaymentType = mutationWithClientMutationId({
 });
 
 export const associatePaymentTypeInputFields = {
-  business: { type: new GraphQLNonNull(GraphQLString) },
-  paymentType: { type: new GraphQLNonNull(GraphQLString) },
+  business: {
+    description: 'Business related ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  paymentType: {
+    description: 'Payment type ID.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
 };
 
 const associatePaymentType = mutationWithClientMutationId({
+  description: 'Associate a payment type with a business',
   name: 'AssociatePaymentType',
   inputFields: associatePaymentTypeInputFields,
   outputFields: { businessPaymentType: { type: BusinessPaymentTypeType } },

@@ -6,23 +6,66 @@ import { GraphQLNonNull, GraphQLString, GraphQLList } from 'graphql';
 import GraphQLJSON from 'graphql-type-json';
 
 export const inputFields = {
-  airtableId: { type: new GraphQLNonNull(GraphQLString) },
-  name: { type: new GraphQLNonNull(GraphQLString) },
-  services: { type: new GraphQLList(GraphQLString) },
-  channels: { type: new GraphQLList(GraphQLString) },
-  categories: { type: new GraphQLList(GraphQLString) },
-  pictures: { type: new GraphQLList(GraphQLJSON) },
-  website: { type: new GraphQLList(GraphQLString) },
-  whatsapp: { type: new GraphQLList(GraphQLString) },
-  phone: { type: GraphQLString },
-  state: { type: GraphQLString },
-  city: { type: GraphQLString },
-  instagram: { type: GraphQLString },
-  email: { type: GraphQLString },
-  approved: { type: GraphQLString },
+  airtableId: {
+    description: 'Imported Airtable ID.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  name: {
+    description: 'Business name.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  services: {
+    description: 'Business services.',
+    type: new GraphQLList(GraphQLString),
+  },
+  channels: {
+    description: 'Business channels.',
+    type: new GraphQLList(GraphQLString),
+  },
+  categories: {
+    description: 'Business categories.',
+    type: new GraphQLList(GraphQLString),
+  },
+  pictures: {
+    description: 'Business pictures.',
+    type: new GraphQLList(GraphQLJSON)
+  },
+  website: {
+    description: 'Business website.',
+    type: GraphQLString,
+  },
+  whatsapp: {
+    description: 'Business whatsapp.',
+    type: GraphQLString,
+  },
+  phone: {
+    description: 'Business phone.',
+    type: GraphQLString,
+  },
+  state: {
+    description: 'Business state.',
+    type: GraphQLString,
+  },
+  city: {
+    description: 'Business city.',
+    type: GraphQLString,
+  },
+  instagram: {
+    description: 'Business instagram.',
+    type: GraphQLString,
+  },
+  email: {
+    description: 'Business email.',
+    type: GraphQLString,
+  },
+  approved: {
+    description: 'Business is approved - not normalized. Expected `Sim` or `Não`, equivalent to `Yes` or `No` respectively.',
+    type: GraphQLString,
+  },
 };
 
 const importAirtableBusiness = mutationWithClientMutationId({
+  description: 'Import a business from Airtable.',
   name: 'ImportAirtableBusiness',
   inputFields,
   outputFields: { business: { type: BusinessType } },

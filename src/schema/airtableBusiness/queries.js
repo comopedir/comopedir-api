@@ -12,6 +12,7 @@ import AirtableBusinessType from './index';
 let atb = new airtable();
 
 const airtableBusiness = {
+  description: 'Fetches Airtable businesses.',
   type: AirtableBusinessType,
   args: {
     airtableId: {
@@ -59,6 +60,7 @@ const airtableBusiness = {
 };
 
 const airtableBusinesses = {
+  description: 'Fetches an Airtable business given its ID.',
   type: connectionDefinitions({
     name: 'ExternalTable',
     nodeType: AirtableBusinessType,

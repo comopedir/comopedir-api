@@ -6,14 +6,30 @@ import PersonType from './index';
 import isValid from './validate';
 
 export const inputFields = {
-  name: { type: new GraphQLNonNull(GraphQLString) },
-  password: { type: GraphQLString },
-  birthdate: { type: new GraphQLNonNull(GraphQLString) },
-  email: { type: new GraphQLNonNull(GraphQLString) },
-  cpfCnpj: { type: new GraphQLNonNull(GraphQLString) },
+  name: {
+    description: 'Person name.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  password: {
+    description: 'Person password.',
+    type: GraphQLString,
+  },
+  birthdate: {
+    description: 'Person birth date.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  email: {
+    description: 'Person email.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  cpfCnpj: {
+    description: 'Person identification document (CPF or CNPJ).',
+    type: new GraphQLNonNull(GraphQLString)
+  },
 };
 
 const createPerson = mutationWithClientMutationId({
+  description: 'Create a person.',
   name: 'CreatePerson',
   inputFields,
   outputFields: {

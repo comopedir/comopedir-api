@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLFloat } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLID } from 'graphql';
 
 import PictureController from '../../controllers/PictureController';
 
@@ -7,7 +7,7 @@ import isValid from './validate';
 import type from './index'
 
 export const createFromUrlInputFields = {
-  business: { type: new GraphQLNonNull(GraphQLString) },
+  business: { type: new GraphQLNonNull(GraphQLID) },
   url: { type: new GraphQLNonNull(GraphQLString) },
 };
 
