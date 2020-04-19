@@ -6,6 +6,7 @@ import LanguageType from '../language';
 
 export default new GraphQLObjectType({
   name: 'Translation',
+  description: 'Manage content translation.',
   interfaces: [nodeInterface],
 
   fields: () => ({
@@ -13,6 +14,7 @@ export default new GraphQLObjectType({
 
     language: {
       type: new GraphQLNonNull(LanguageType),
+      description: 'Related language.',
       resolve(parent, args, { languageById }) {
         return languageById.load(parent.language);
       },
@@ -20,10 +22,12 @@ export default new GraphQLObjectType({
 
     name: {
       type: new GraphQLNonNull(GraphQLString),
+      description: 'Translation name.',
     },
 
     description: {
       type: GraphQLString,
+      description: 'Translation description.',
     },
   }),
 });
