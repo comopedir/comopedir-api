@@ -12,11 +12,13 @@ import PictureType from '../picture';
 
 export default new GraphQLObjectType({
   name: 'PictureFile',
+  description: 'Manage picture files for each picture.',
   interfaces: [nodeInterface],
   
   fields: () => ({
     id: globalIdField(),
     picture: {
+      description: 'Related picture.',
       type: new GraphQLNonNull(PictureType),
       resolve(parent, _args, { pictureById }) {
         return pictureById.load(parent.picture);
@@ -24,15 +26,19 @@ export default new GraphQLObjectType({
     },
     url: {
       type: new GraphQLNonNull(GraphQLString),
+      description: 'Picture file url.',
     },
     size: {
       type: GraphQLInt,
+      description: 'Picture size in bytes.',
     },
     width: {
       type: GraphQLInt,
+      description: 'Picture width in pixels.',
     },
     height: {
       type: GraphQLInt,
+      description: 'Picture height in pixels.',
     },
   }),
 });
