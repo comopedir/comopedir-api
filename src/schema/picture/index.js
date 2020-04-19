@@ -3,6 +3,7 @@ import {
   GraphQLString,
   GraphQLNonNull,
 } from 'graphql';
+import { GraphQLDateTime } from 'graphql-iso-date';
 
 import { globalIdField } from 'graphql-relay';
 import { nodeInterface } from '../node';
@@ -52,13 +53,13 @@ export default new GraphQLObjectType({
       },
     },
     createdAt: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLDateTime),
       resolve(parent) {
         return parent.created_at;
       },
     },
     updatedAt: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLDateTime),
       resolve(parent) {
         return parent.updated_at;
       },

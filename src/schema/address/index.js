@@ -1,4 +1,5 @@
 import { globalIdField } from 'graphql-relay';
+import { GraphQLDateTime } from 'graphql-iso-date';
 import { GraphQLObjectType, GraphQLNonNull, GraphQLString, GraphQLBoolean, GraphQLFloat } from 'graphql';
 
 import BusinessType from '../business';
@@ -36,13 +37,13 @@ export default new GraphQLObjectType({
     },
     country: { type: new GraphQLNonNull(GraphQLString) },
     createdAt: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLDateTime),
       resolve(parent) {
         return parent.created_at;
       },
     },
     updatedAt: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLDateTime),
       resolve(parent) {
         return parent.updated_at;
       },
