@@ -9,7 +9,7 @@ import { nodeInterface } from '../node';
 
 export default new GraphQLObjectType({
   name: 'Channel',
-  description: 'Manage channels.',
+  description: 'Represent a business channel (for distribution).',
   interfaces: [nodeInterface],
   
   fields: () => ({

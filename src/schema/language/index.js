@@ -5,7 +5,7 @@ import { nodeInterface } from '../node';
 
 export default new GraphQLObjectType({
   name: 'Language',
-  description: 'Manage languages.',
+  description: 'Represent a supported language for the system.',
   interfaces: [nodeInterface],
 
   fields: {

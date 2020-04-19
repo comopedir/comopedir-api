@@ -5,7 +5,7 @@ import { nodeInterface } from '../node';
 
 export default new GraphQLObjectType({
   name: 'Network',
-  description: 'Manage Networks.',
+  description: 'Represent a business network for business.',
   interfaces: [nodeInterface],
 
   fields: {

@@ -6,7 +6,7 @@ import CategoryType from '../category'
 
 export default new GraphQLObjectType({
   name: 'BusinessCategory',
-  description: 'Business category assignment.',
+  description: 'Represent a category relationship with a business.',
   
   fields: () => ({
     id: globalIdField(),

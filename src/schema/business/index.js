@@ -12,7 +12,7 @@ import PictureType from '../picture';
 
 export default new GraphQLObjectType({
   name: 'Business',
-  description: 'Manage businesses.',
+  description: 'Represent a business (restaurant or other food related business).',
   
   fields: () => ({
     id: globalIdField(),

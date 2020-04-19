@@ -12,7 +12,7 @@ import TranslationType from '../translation';
 
 export default new GraphQLObjectType({
   name: 'Service',
-  description: 'Manage a service availability for each restaurant.',
+  description: 'Represent a supported service for a business.',
   interfaces: [nodeInterface],
   
   fields: () => ({
