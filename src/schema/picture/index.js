@@ -12,6 +12,7 @@ import BusinessType from '../business';
 
 export default new GraphQLObjectType({
   name: 'Picture',
+  description: 'Manage pictures for each business.',
   interfaces: [nodeInterface],
   
   fields: () => ({
@@ -24,9 +25,11 @@ export default new GraphQLObjectType({
     },
     type: {
       type: GraphQLString,
+      description: 'Picture type (MIME type) from importing system.',
     },
     description: {
       type: GraphQLString,
+      description: 'Picture description.',
     },
     originId: {
       type: GraphQLString,

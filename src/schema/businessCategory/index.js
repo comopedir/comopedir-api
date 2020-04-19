@@ -6,17 +6,20 @@ import CategoryType from '../category'
 
 export default new GraphQLObjectType({
   name: 'BusinessCategory',
+  description: 'Business category assignment.',
   
   fields: () => ({
     id: globalIdField(),
     business: {
       type: new GraphQLNonNull(BusinessType),
+      description: 'Related business.',
       resolve(parent, _args, { businessById }) {
         return businessById.load(parent.business);
       },
     },
     category: {
       type: new GraphQLNonNull(CategoryType),
+      description: 'Related category.',
       resolve(parent, _args, { categoryById }) {
         return categoryById.load(parent.category);
       },
