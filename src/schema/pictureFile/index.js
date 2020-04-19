@@ -12,7 +12,7 @@ import PictureType from '../picture';
 
 export default new GraphQLObjectType({
   name: 'PictureFile',
-  description: 'Manage picture files for each picture.',
+  description: 'Represent a picture file reference for a picture.',
   interfaces: [nodeInterface],
   
   fields: () => ({

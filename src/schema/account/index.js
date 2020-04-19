@@ -11,7 +11,7 @@ import personType from '../person';
 
 export default new GraphQLObjectType({
   name: 'Account',
-  description: 'Manage system accounts.',
+  description: 'Represent a system account.',
   fields: () => ({
     id: globalIdField(),
     person: {

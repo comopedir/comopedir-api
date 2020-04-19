@@ -12,7 +12,7 @@ import TranslationType from '../translation';
 
 export default new GraphQLObjectType({
   name: 'PaymentType',
-  description: 'Manage Payment types.',
+  description: 'Represent a payment type for a business.',
   interfaces: [nodeInterface],
   
   fields: () => ({

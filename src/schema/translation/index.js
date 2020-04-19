@@ -6,7 +6,7 @@ import LanguageType from '../language';
 
 export default new GraphQLObjectType({
   name: 'Translation',
-  description: 'Manage content translation.',
+  description: 'Represent a translation.',
   interfaces: [nodeInterface],
 
   fields: () => ({

@@ -6,7 +6,7 @@ import BusinessType from '../business';
 
 export default new GraphQLObjectType({
   name: 'Address',
-  description: 'Manage addresses for a specific business.',
+  description: 'Represent an address (location) for a specific business.',
   
   fields: () => ({
     id: globalIdField(),

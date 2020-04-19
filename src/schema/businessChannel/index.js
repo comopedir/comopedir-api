@@ -6,7 +6,7 @@ import ChannelType from '../channel'
 
 export default new GraphQLObjectType({
   name: 'BusinessChannel',
-  description: 'Business channel assignment.',
+  description: 'Represent a channel relationship with a business.',
   
   fields: () => ({
     id: globalIdField(),

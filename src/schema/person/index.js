@@ -6,7 +6,7 @@ import accountType from '../account';
 
 export default new GraphQLObjectType({
   name: 'Person',
-  description: 'Manage persons.',
+  description: 'Represent a person.',
   fields: () => ({
     id: globalIdField(),
     name: {
@@ -26,7 +26,7 @@ export default new GraphQLObjectType({
     },
     account: {
       type: accountType,
-      description: 'Related account.',
+      description: 'Related system account.',
       resolve(parent, _args, { accountById }) {
         return accountById.load(parent.account);
       },

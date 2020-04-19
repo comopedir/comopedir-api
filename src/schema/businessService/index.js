@@ -6,7 +6,7 @@ import ServiceType from '../service'
 
 export default new GraphQLObjectType({
   name: 'BusinessService',
-  description: 'Business service assignment.',
+  description: 'Represent a service relationship with a business.',
   
   fields: () => ({
     id: globalIdField(),

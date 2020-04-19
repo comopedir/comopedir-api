@@ -6,7 +6,7 @@ import PaymentTypeType from '../paymentType'
 
 export default new GraphQLObjectType({
   name: 'BusinessPaymentType',
-  description: 'Business payment assignment.',
+  description: 'Represent a payment type relationship with a business.',
   
   fields: () => ({
     id: globalIdField(),

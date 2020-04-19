@@ -12,7 +12,7 @@ import TranslationType from '../translation';
 
 export default new GraphQLObjectType({
   name: 'Category',
-  description: 'Manage categories.',
+  description: 'Represent a business category.',
   interfaces: [nodeInterface],
   
   fields: () => ({
@@ -20,7 +20,6 @@ export default new GraphQLObjectType({
     slug: {
       type: new GraphQLNonNull(GraphQLString),
       description: 'Category slug (url identification).',
-      
     },
     priority: {
       type: new GraphQLNonNull(GraphQLInt),
