@@ -10,6 +10,7 @@ import db from '../../services/db';
 import ChannelType from './index';
 
 const channels = {
+  description: 'Fetches business channels.',
   type: connectionDefinitions({
     name: 'Channel',
     nodeType: ChannelType,

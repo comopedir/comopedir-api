@@ -10,6 +10,7 @@ import db from '../../services/db';
 import ServiceType from './index';
 
 const services = {
+  description: 'Fetches business services.',
   type: connectionDefinitions({
     name: 'Service',
     nodeType: ServiceType,

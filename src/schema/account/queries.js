@@ -10,6 +10,7 @@ import AccountType from '../account';
 import db from '../../services/db';
 
 const accounts = {
+  description: 'Fetches system accounts.',
   type: connectionDefinitions({
     name: 'Account',
     nodeType: AccountType,

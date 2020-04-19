@@ -10,6 +10,7 @@ import db from '../../services/db';
 import PaymentType from './index';
 
 const paymentTypes = {
+  description: 'Fetches business payment types.',
   type: connectionDefinitions({
     name: 'PaymentType',
     nodeType: PaymentType,
