@@ -17,19 +17,19 @@ export default new GraphQLObjectType({
     latitude: { type: GraphQLFloat },
     longitude: { type: GraphQLFloat },
     current: { type: GraphQLBoolean },
-    street: { type: new GraphQLNonNull(GraphQLString) },
+    street: { type: GraphQLString },
     streetNumber: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
       resolve(parent) {
         return parent.street_number;
       },
     },
     complement: { type: GraphQLString },
-    district: { type: new GraphQLNonNull(GraphQLString) },
+    district: { type: GraphQLString },
     city: { type: new GraphQLNonNull(GraphQLString) },
     state: { type: new GraphQLNonNull(GraphQLString) },
     zipCode: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
       resolve(parent) {
         return parent.zip_code;
       },
