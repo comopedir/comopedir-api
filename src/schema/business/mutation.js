@@ -21,7 +21,7 @@ export const createBusinessInputFields = {
 };
 
 export const updateBusinessInputFields = {
-  businessId: {
+  business: {
     description: 'Business ID.',
     type: new GraphQLNonNull(GraphQLID),
   },

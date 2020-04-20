@@ -9,7 +9,7 @@ const schema = yup.object().shape({
 const isCreateValid = obj => schema.validate(obj);
 
 const updateSchema = yup.object().shape({
-  businessId: yup.string().required(),
+  business: yup.string().required(),
   field: yup.string().required(),
   value: yup.string().required(),
 });
