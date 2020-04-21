@@ -21,9 +21,12 @@ const business = {
     airtableId: {
       type: GraphQLString,
     },
+    slug: {
+      type: GraphQLString,
+    },
   },
   async resolve(_root, args, context) {
-    const { id, airtableId } = args;
+    const { id, airtableId, slug } = args;
 
     let business;
 
@@ -44,6 +47,20 @@ const business = {
       business = await BusinessController.getByParam(
         'airtable_id', 
         airtableId
+      );
+      
+      if (!business) {
+        return null
+      }
+      else {
+        return context.businessById.load(business.id);
+      }
+    }
+
+    if (slug) {
+      business = await BusinessController.getByParam(
+        'slug', 
+        slug
       );
       
       if (!business) {
