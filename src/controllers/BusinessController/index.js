@@ -49,7 +49,7 @@ const BusinessController = {
     await context.isAuthorized(['admin']);
 
     try {
-      const { businessId, field, value } = input;
+      const { business: businessId, field, value } = input;
       const dbBusinessId = fromGlobalId(businessId).id;
 
       let updateField;
@@ -59,19 +59,29 @@ const BusinessController = {
       let business = await BusinessController.getByParam('id', dbBusinessId);
       if (!business) throw new Error('Business does not exist.');
 
+      const updatePayload = {};
+
       switch (field) {
         case 'slug':
           updateField = 'slug';
+          updatePayload[updateField] = value;
           break;
         case 'name':
           updateField = 'name';
+          updatePayload[updateField] = value;
+        case 'network':
+          updateField = 'network';
+          if (value) {
+            updatePayload[updateField] = fromGlobalId(value).id;
+          } else {
+            updatePayload[updateField] = null;
+          }
+          
           break;
         default:
           throw new Error('Access denied.');
       }
 
-      const updatePayload = {};
-      updatePayload[updateField] = value;
       updatePayload['updated_at'] = new Date().toUTCString();
 
       business = await db
