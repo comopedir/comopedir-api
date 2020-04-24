@@ -13,6 +13,8 @@ import schema from './schema';
 import Context from './schema/context';
 import authMiddleware from './middlewares/authMiddleware';
 
+import gmaps from './services/gmaps';
+
 const app = express();
 
 var corsOptions = {
@@ -31,6 +33,9 @@ app.use(bodyParser.urlencoded({ limit: '300mb', extended: true }));
 app.use(authMiddleware);
 
 app.get('/', (req, res) => {
+
+  maps = new gmaps();
+
   res.type('text/plain').send('Olá :)');
   res.status(200);
 });

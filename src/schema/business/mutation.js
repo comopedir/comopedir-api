@@ -52,7 +52,7 @@ const updateBusiness = mutationWithClientMutationId({
   inputFields: updateBusinessInputFields,
   outputFields: { business: { type } },
   mutateAndGetPayload: async (input, context) => {
-    // context.isAuthorized(['admin']);
+    context.isAuthorized(['admin']);
     await isUpdateValid(input);
     return BusinessController.update(input, context);
   },
