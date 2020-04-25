@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
+import { GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import CategoryController from '../../controllers/CategoryController';
 
 import { isCreateValid, isAssociateValid } from './validate';
@@ -28,23 +28,23 @@ const createCategory = mutationWithClientMutationId({
   },
 });
 
-export const associateCategoryInputFields = {
+export const associateCategoriesInputFields = {
   business: {
     description: 'Related business ID.',
     type: new GraphQLNonNull(GraphQLID),
   },
-  category: {
-    description: 'Related category ID.',
-    type: new GraphQLNonNull(GraphQLID),
+  categories: {
+    description: 'Related categories ID list.',
+    type: new GraphQLList(new GraphQLNonNull(GraphQLID)),
   },
 };
 
-const associateCategory = mutationWithClientMutationId({
+const associateCategories = mutationWithClientMutationId({
   description: 'Associate a category with a business.',
-  name: 'AssociateCategory',
-  inputFields: associateCategoryInputFields,
+  name: 'AssociateCategories',
+  inputFields: associateCategoriesInputFields,
   outputFields: { businessCategory: { type: BusinessCategoryType } },
-  mutateAndGetPayload: async (input, _context) => {
+  mutateAndGetPayload: async (input, _context) => {   
     await isAssociateValid(input);
     return CategoryController.associate(input);
   },
@@ -52,5 +52,5 @@ const associateCategory = mutationWithClientMutationId({
 
 export default {
   createCategory,
-  associateCategory,
+  associateCategories,
 };
