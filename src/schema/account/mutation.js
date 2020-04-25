@@ -22,7 +22,7 @@ export const inputFieldsChangePassword = {
 };
 
 export const inputType = new GraphQLInputObjectType({
-  name: 'accountInput',
+  name: 'AccountInput',
   fields: {
     id: { type: GraphQLID },
     phoneNumber: { type: GraphQLInt },
