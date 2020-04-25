@@ -64,6 +64,18 @@ const createAddress = mutationWithClientMutationId({
   },
 });
 
+const updateAddress = mutationWithClientMutationId({
+  name: 'UpdateAddress',
+  description: 'Update an address for a business.',
+  inputFields: { id: { type: GraphQLID }, ...addressInputFields },
+  outputFields: { address: { type } },
+  mutateAndGetPayload: async (input, _context) => {
+    await isValid(input);
+    return AddressController.update(input);
+  },
+});
+
 export default {
+  updateAddress,
   createAddress,
 };
