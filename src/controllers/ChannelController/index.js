@@ -35,50 +35,78 @@ const ChannelController = {
       return err;
     }
   },
-  associate: async (input) => {
+
+  associateChannel: async (business, channelId, value, trx) => {
     try {
-      let business;
-
-      if (input.business) {
-        business = await BusinessController.getByParam(
-          'id', 
-          fromGlobalId(input.business).id
-        );
-      }
-
-      if (!business) throw new Error('Business not found.');
-
-      let channel;
-
-      if (input.channel) {
-        channel = await ChannelController.getByParam(
-          'id', 
-          fromGlobalId(input.channel).id
-        );        
-      }
+      const channel = await ChannelController.getByParamWithTransaction(
+        'id', 
+        fromGlobalId(channelId).id,
+        trx,
+      );
 
       if (!channel) throw new Error('Channel not found.');
-      
+
       await db
         .table('business_channel')
-        .where({
-          business: business.id,
-          channel: channel.id,
-        })
-        .del();
-
-      const businessChannel = await db
-        .table('business_channel')
+        .transacting(trx)
         .insert({
           business: business.id,
           channel: channel.id,
-          value: input.value,
+          value,
         })
         .returning('*')
         .then(rows => rows[0]);
 
+      return Promise.resolve('ok');
+    }
+    catch (err) {
+      console.error('Problem associating business / channel.');
+    }
+  },
+
+  associate: async (input) => {
+    const trx = await db.transaction();
+
+    try {
+      let business;
+
+      if (input.business) {
+        business = await BusinessController.getByParamWithTransaction(
+          'id', 
+          fromGlobalId(input.business).id,
+          trx
+        );
+      }
+
+      if (!business) throw new Error('Business not found.');
+      if (!input.channels) throw new Error('Channels not found.');
+
+      await db
+        .table('business_channel')
+        .transacting(trx)
+        .where({
+          business: business.id,
+        })
+        .del();
+
+      await Promise.all(
+        input.channels.map(
+          channelData => ChannelController.associateChannel(business, channelData[0], channelData[1], trx)
+        )
+      );
+
+      const businessChannel = await db
+        .table('business_channel')
+        .transacting(trx)
+        .where({
+          business: business.id,
+        });
+
+      await trx.commit();
+
       return { businessChannel: { ...businessChannel } };
     } catch (err) {
+      await trx.rollback();
       return err;
     }
   },
