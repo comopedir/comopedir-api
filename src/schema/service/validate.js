@@ -9,7 +9,7 @@ const isCreateValid = obj => createSchema.validate(obj);
 
 const associateSchema = yup.object().shape({
   business: yup.string().required(),
-  services: yup.array().required(),
+  services: yup.array().nullable(),
 });
 
 const isAssociateValid = obj => associateSchema.validate(obj);

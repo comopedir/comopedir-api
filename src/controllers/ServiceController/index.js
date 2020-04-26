@@ -59,7 +59,7 @@ const ServiceController = {
       return Promise.resolve('ok');
     }
     catch (err) {
-      console.error('Problem associating service / category.');
+      console.error('Problem associating business / service.');
     }
   },
 
@@ -78,7 +78,6 @@ const ServiceController = {
 
       if (!business) throw new Error('Business not found.');
       if (!input.services) throw new Error('Services not found.');
-      if (input.services.length === 0) throw new Error('Services not found.');
 
       await db
         .table('business_service')
