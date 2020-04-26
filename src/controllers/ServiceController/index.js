@@ -35,7 +35,37 @@ const ServiceController = {
       return err;
     }
   },
+
+  associateService: async (business, serviceId, trx) => {
+    try {
+      const service = await ServiceController.getByParamWithTransaction(
+        'id', 
+        fromGlobalId(serviceId).id,
+        trx,
+      );
+
+      if (!service) throw new Error('Service not found.');
+
+      await db
+        .table('business_service')
+        .transacting(trx)
+        .insert({
+          business: business.id,
+          service: service.id,
+        })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      return Promise.resolve('ok');
+    }
+    catch (err) {
+      console.error('Problem associating business / service.');
+    }
+  },
+
   associate: async (input) => {
+    const trx = await db.transaction();
+
     try {
       let business;
 
@@ -47,34 +77,30 @@ const ServiceController = {
       }
 
       if (!business) throw new Error('Business not found.');
+      if (!input.services) throw new Error('Services not found.');
 
-      let service;
-
-      if (input.service) {
-        service = await ServiceController.getByParam(
-          'id', 
-          fromGlobalId(input.service).id
-        );        
-      }
-
-      if (!service) throw new Error('Service not found.');
-      
       await db
         .table('business_service')
+        .transacting(trx)
         .where({
           business: business.id,
-          service: service.id,
         })
         .del();
 
+      await Promise.all(
+        input.services.map(
+          serviceId => ServiceController.associateService(business, serviceId, trx)
+        )
+      );
+
       const businessService = await db
         .table('business_service')
-        .insert({
+        .transacting(trx)
+        .where({
           business: business.id,
-          service: service.id,
-        })
-        .returning('*')
-        .then(rows => rows[0]);
+        });
+
+      await trx.commit();
 
       return { businessService: { ...businessService } };
     } catch (err) {

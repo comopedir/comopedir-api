@@ -79,7 +79,6 @@ const CategoryController = {
 
       if (!business) throw new Error('Business not found.');
       if (!input.categories) throw new Error('Categories not found.');
-      if (input.categories.length === 0) throw new Error('Categories not found.');
 
       await db
         .table('business_category')

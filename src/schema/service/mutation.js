@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
+import { GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import ServiceController from '../../controllers/ServiceController';
 
 import { isCreateValid, isAssociateValid } from './validate';
@@ -28,21 +28,21 @@ const createService = mutationWithClientMutationId({
   },
 });
 
-export const associateServiceInputFields = {
+export const associateServicesInputFields = {
   business: {
     description: 'Related business (ID).',
     type: new GraphQLNonNull(GraphQLID),
   },
-  service: {
-    description: 'Related service (ID).',
-    type: new GraphQLNonNull(GraphQLID),
+  services: {
+    description: 'Related services (ID list).',
+    type: new GraphQLList(new GraphQLNonNull(GraphQLID)),
   },
 };
 
-const associateService = mutationWithClientMutationId({
-  description: 'Associate a service with a business.',
-  name: 'AssociateService',
-  inputFields: associateServiceInputFields,
+const associateServices = mutationWithClientMutationId({
+  description: 'Associate services with a business.',
+  name: 'AssociateServices',
+  inputFields: associateServicesInputFields,
   outputFields: { businessService: { type: BusinessServiceType } },
   mutateAndGetPayload: async (input, _context) => {
     await isAssociateValid(input);
@@ -52,5 +52,5 @@ const associateService = mutationWithClientMutationId({
 
 export default {
   createService,
-  associateService,
+  associateServices,
 };

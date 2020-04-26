@@ -11,6 +11,14 @@ const PaymentTypeController = {
       .returning('*')
       .then(rows => rows[0]),
 
+  getByParamWithTransaction: async (key, value, TransactionDB) =>
+    db
+      .table('payment_type')
+      .transacting(TransactionDB)
+      .where(key, '=', value)
+      .returning('*')
+      .then(rows => rows[0]),
+
   create: async (input) => {
     try {
       const paymentType = await db
@@ -27,7 +35,37 @@ const PaymentTypeController = {
       return err;
     }
   },
+
+  associatePaymentType: async (business, paymentTypeId, trx) => {
+    try {
+      const paymentType = await PaymentTypeController.getByParamWithTransaction(
+        'id', 
+        fromGlobalId(paymentTypeId).id,
+        trx,
+      );
+
+      if (!paymentType) throw new Error('Payment type not found.');
+
+      await db
+        .table('business_payment_type')
+        .transacting(trx)
+        .insert({
+          business: business.id,
+          payment_type: paymentType.id,
+        })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      return Promise.resolve('ok');
+    }
+    catch (err) {
+      console.error('Problem associating business / payment type.');
+    }
+  },
+
   associate: async (input) => {
+    const trx = await db.transaction();
+    
     try {
       let business;
 
@@ -39,34 +77,30 @@ const PaymentTypeController = {
       }
 
       if (!business) throw new Error('Business not found.');
+      if (!input.paymentTypes) throw new Error('Payment type not found.');
 
-      let paymentType;
-
-      if (input.paymentType) {
-        paymentType = await PaymentTypeController.getByParam(
-          'id', 
-          fromGlobalId(input.paymentType).id
-        );        
-      }
-
-      if (!paymentType) throw new Error('Payment type not found.');
-      
       await db
         .table('business_payment_type')
+        .transacting(trx)
         .where({
           business: business.id,
-          payment_type: paymentType.id,
         })
         .del();
 
+      await Promise.all(
+        input.paymentTypes.map(
+          paymentTypeId => PaymentTypeController.associatePaymentType(business, paymentTypeId, trx)
+        )
+      );
+
       const businessPaymentType = await db
         .table('business_payment_type')
-        .insert({
+        .transacting(trx)
+        .where({
           business: business.id,
-          payment_type: paymentType.id,
-        })
-        .returning('*')
-        .then(rows => rows[0]);
+        });
+
+      await trx.commit();
 
       return { businessPaymentType: { ...businessPaymentType } };
     } catch (err) {

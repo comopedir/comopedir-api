@@ -1,5 +1,5 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
+import { GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import PaymentTypeController from '../../controllers/PaymentTypeController';
 
 import { isCreateValid, isAssociateValid } from './validate';
@@ -33,15 +33,15 @@ export const associatePaymentTypeInputFields = {
     description: 'Business related ID.',
     type: new GraphQLNonNull(GraphQLID),
   },
-  paymentType: {
-    description: 'Payment type ID.',
-    type: new GraphQLNonNull(GraphQLString),
+  paymentTypes: {
+    description: 'Payment type ID list.',
+    type: new GraphQLList(new GraphQLNonNull(GraphQLString)),
   },
 };
 
-const associatePaymentType = mutationWithClientMutationId({
+const associatePaymentTypes = mutationWithClientMutationId({
   description: 'Associate a payment type with a business',
-  name: 'AssociatePaymentType',
+  name: 'AssociatePaymentTypes',
   inputFields: associatePaymentTypeInputFields,
   outputFields: { businessPaymentType: { type: BusinessPaymentTypeType } },
   mutateAndGetPayload: async (input, _context) => {
@@ -52,5 +52,5 @@ const associatePaymentType = mutationWithClientMutationId({
 
 export default {
   createPaymentType,
-  associatePaymentType,
+  associatePaymentTypes,
 };
