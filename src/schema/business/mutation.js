@@ -2,7 +2,7 @@ import { mutationWithClientMutationId } from 'graphql-relay';
 import { GraphQLNonNull, GraphQLString, GraphQLID } from 'graphql';
 
 import BusinessController from '../../controllers/BusinessController';
-import { isCreateValid, isUpdateValid } from './validate';
+import { isCreateValid, isUpdateValid, isDeleteValid } from './validate';
 import type from './index'
 
 export const createBusinessInputFields = {
@@ -35,6 +35,13 @@ export const updateBusinessInputFields = {
   },
 };
 
+export const deleteBusinessInputFields = {
+  business: {
+    description: 'Business ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+};
+
 const createBusiness = mutationWithClientMutationId({
   description: 'Create a business.',
   name: 'CreateBusiness',
@@ -58,7 +65,20 @@ const updateBusiness = mutationWithClientMutationId({
   },
 });
 
+const deleteBusiness = mutationWithClientMutationId({
+  description: 'Delete a business.',
+  name: 'DeleteBusiness',
+  inputFields: deleteBusinessInputFields,
+  outputFields: { business: { type } },
+  mutateAndGetPayload: async (input, context) => {
+    context.isAuthorized(['admin']);
+    await isDeleteValid(input);
+    return BusinessController.delete(input, context);
+  },
+});
+
 export default {
   createBusiness,
   updateBusiness,
+  deleteBusiness,
 };
