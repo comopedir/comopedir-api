@@ -45,6 +45,7 @@ const BusinessController = {
       return err;
     }
   },
+
   update: async (input, context) => {
     await context.isAuthorized(['admin']);
 
@@ -95,6 +96,74 @@ const BusinessController = {
     } catch (err) {
       console.error(err);
       throw new Error('Error updating business data.');
+    }
+  },
+
+  delete: async (input, context) => {
+    const trx = await db.transaction();
+
+    await context.isAuthorized(['admin']);
+
+    try {
+      const { business: businessId } = input;
+      const dbBusinessId = fromGlobalId(businessId).id;
+
+      let business = await BusinessController.getByParamWithTransaction(
+        'id', 
+        dbBusinessId,
+        trx
+      );
+      if (!business) throw new Error('Business does not exist.');
+
+      await db
+        .table('address')
+        .transacting(trx)
+        .where({ business: business.id })
+        .del();
+
+      await db
+        .table('business_channel')
+        .transacting(trx)
+        .where({ business: business.id })
+        .del();
+
+      await db
+        .table('business_category')
+        .transacting(trx)
+        .where({ business: business.id })
+        .del();
+
+      await db
+        .table('business_service')
+        .transacting(trx)
+        .where({ business: business.id })
+        .del();
+
+      await db
+        .table('business_payment_type')
+        .transacting(trx)
+        .where({ business: business.id })
+        .del();
+
+      await db
+        .table('picture')
+        .transacting(trx)
+        .where({ business: business.id })
+        .del();
+
+      await db
+        .table('business')
+        .transacting(trx)
+        .where({ id: business.id })
+        .del();
+
+      await trx.commit();
+
+      return { business };
+    } catch (err) {
+      await trx.rollback();
+      console.error(err);
+      throw new Error('Error deleting business.');
     }
   },
 };
