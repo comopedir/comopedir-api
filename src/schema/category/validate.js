@@ -14,7 +14,16 @@ const associateSchema = yup.object().shape({
 
 const isAssociateValid = obj => associateSchema.validate(obj);
 
+const updateSchema = yup.object().shape({
+  category: yup.string().required(),
+  field: yup.string().required(),
+  value: yup.string().nullable(),
+});
+
+const isUpdateValid = obj => updateSchema.validate(obj);
+
 export {
   isCreateValid,
   isAssociateValid,
+  isUpdateValid,
 }

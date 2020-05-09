@@ -2,7 +2,7 @@ import { mutationWithClientMutationId } from 'graphql-relay';
 import { GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
 import CategoryController from '../../controllers/CategoryController';
 
-import { isCreateValid, isAssociateValid } from './validate';
+import { isCreateValid, isAssociateValid, isUpdateValid } from './validate';
 import CategoryType from './index';
 import BusinessCategoryType from '../businessCategory';
 
@@ -50,7 +50,35 @@ const associateCategories = mutationWithClientMutationId({
   },
 });
 
+export const updateCategoryInputFields = {
+  category: {
+    description: 'Category ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  field: {
+    description: 'Category field to update.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  value: {
+    description: 'Category value to update.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+};
+
+const updateCategory = mutationWithClientMutationId({
+  description: 'Update a category.',
+  name: 'UpdateCategory',
+  inputFields: updateCategoryInputFields,
+  outputFields: { category: { type: CategoryType } },
+  mutateAndGetPayload: async (input, context) => {
+    context.isAuthorized(['admin']);
+    await isUpdateValid(input);
+    return CategoryController.update(input, context);
+  },
+});
+
 export default {
   createCategory,
   associateCategories,
+  updateCategory,
 };

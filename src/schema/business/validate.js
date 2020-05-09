@@ -14,11 +14,11 @@ const updateSchema = yup.object().shape({
   value: yup.string().nullable(),
 });
 
+const isUpdateValid = obj => updateSchema.validate(obj);
+
 const deleteSchema = yup.object().shape({
   business: yup.string().required(),
 });
-
-const isUpdateValid = obj => updateSchema.validate(obj);
 
 const isDeleteValid = obj => deleteSchema.validate(obj);
 
