@@ -1,5 +1,6 @@
-import { GraphQLNonNull, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLInt, GraphQLString } from 'graphql';
 import {
+  fromGlobalId,
   connectionDefinitions,
   forwardConnectionArgs,
   connectionFromArraySlice,
@@ -8,6 +9,55 @@ import {
 
 import db from '../../services/db';
 import CategoryType from './index';
+
+import CategoryController from '../../controllers/CategoryController';
+
+const category = {
+  description: 'Fetches a category given its ID or slug.',
+  type: CategoryType,
+  args: {
+    id: {
+      type: GraphQLString,
+    },
+    slug: {
+      type: GraphQLString,
+    },
+  },
+  async resolve(_root, args, context) {
+    const { id, slug } = args;
+
+    let category;
+
+    if (id) {
+      category = await CategoryController.getByParam(
+        'id', 
+        fromGlobalId(id).id
+      );
+      
+      if (!category) {
+        throw new Error('Category not found.');
+      }
+
+      return context.categoryById.load(category.id);
+    }
+
+    if (slug) {
+      category = await CategoryController.getByParam(
+        'slug', 
+        slug
+      );
+      
+      if (!category) {
+        return null
+      }
+      else {
+        return context.categoryById.load(category.id);
+      }
+    }
+    
+    return null;
+  },
+};
 
 const categories = {
   description: 'Fetches business categories.',
@@ -51,4 +101,5 @@ const categories = {
 
 export default {
   categories,
+  category,
 };
