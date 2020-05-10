@@ -133,6 +133,10 @@ const CategoryController = {
           updateField = 'slug';
           updatePayload[updateField] = value;
           break;
+        case 'priority':
+          updateField = 'priority';
+          updatePayload[updateField] = value;
+          break;
         default:
           throw new Error('Access denied.');
       }
@@ -143,7 +147,7 @@ const CategoryController = {
         .where({ id: category.id })
         .returning('*')
         .then(rows => rows[0]);
-        
+
       return { category: { ...category } };
     } catch (err) {
       console.error(err);
