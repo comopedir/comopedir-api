@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 
 const createSchema = yup.object().shape({
+  name: yup.string().required(),
   isoCode: yup.string().required(),
-  priority: yup.number().required(),
 });
 
 const isCreateValid = obj => createSchema.validate(obj);

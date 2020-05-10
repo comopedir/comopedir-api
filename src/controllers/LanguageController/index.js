@@ -20,7 +20,7 @@ const LanguageController = {
 
   create: async (input) => {
     try {
-      const business = await db
+      const language = await db
         .table('language')
         .insert({
           iso_code: input.isoCode,
@@ -57,6 +57,7 @@ const LanguageController = {
         case 'name':
           updateField = 'name';
           updatePayload[updateField] = value;
+          break;
         default:
           throw new Error('Access denied.');
       }

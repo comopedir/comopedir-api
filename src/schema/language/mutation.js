@@ -6,13 +6,13 @@ import { isCreateValid, isUpdateValid } from './validate';
 import LanguageType from './index';
 
 export const languageInputFields = {
+  name: {
+    description: 'Language name.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
   isoCode: {
     description: 'Language iso code.',
     type: new GraphQLNonNull(GraphQLString),
-  },
-  priority: {
-    type: new GraphQLNonNull(GraphQLInt),
-    description: 'Language priority.',
   },
 };
 
