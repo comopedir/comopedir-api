@@ -1,8 +1,8 @@
 import { mutationWithClientMutationId } from 'graphql-relay';
-import { GraphQLNonNull, GraphQLString, GraphQLInt, GraphQLID } from 'graphql';
+import { GraphQLNonNull, GraphQLString, GraphQLID } from 'graphql';
 import LanguageController from '../../controllers/LanguageController';
 
-import { isCreateValid, isUpdateValid } from './validate';
+import { isCreateValid, isUpdateValid, isDeleteValid } from './validate';
 import LanguageType from './index';
 
 export const languageInputFields = {
@@ -54,7 +54,27 @@ const updateLanguage = mutationWithClientMutationId({
   },
 });
 
+export const deleteLanguageInputFields = {
+  language: {
+    description: 'Language ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+};
+
+const deleteLanguage = mutationWithClientMutationId({
+  description: 'Delete a language.',
+  name: 'DeleteLanguage',
+  inputFields: deleteLanguageInputFields,
+  outputFields: { language: { type: LanguageType } },
+  mutateAndGetPayload: async (input, context) => {
+    context.isAuthorized(['admin']);
+    await isDeleteValid(input);
+    return LanguageController.delete(input, context);
+  },
+});
+
 export default {
   createLanguage,
   updateLanguage,
+  deleteLanguage,
 };

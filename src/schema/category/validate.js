@@ -22,8 +22,15 @@ const updateSchema = yup.object().shape({
 
 const isUpdateValid = obj => updateSchema.validate(obj);
 
+const deleteSchema = yup.object().shape({
+  category: yup.string().required(),
+});
+
+const isDeleteValid = obj => deleteSchema.validate(obj);
+
 export {
   isCreateValid,
   isAssociateValid,
   isUpdateValid,
+  isDeleteValid,
 }

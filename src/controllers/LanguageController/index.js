@@ -94,7 +94,7 @@ const LanguageController = {
       await db
         .table('language')
         .transacting(trx)
-        .where({ langugage: language.id })
+        .where({ id: language.id })
         .del();
 
       await trx.commit();
@@ -103,7 +103,7 @@ const LanguageController = {
     } catch (err) {
       await trx.rollback();
       console.error(err);
-      throw new Error('Error deleting business.');
+      throw new Error('Error deleting language.');
     }
   },
 };

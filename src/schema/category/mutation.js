@@ -77,8 +77,28 @@ const updateCategory = mutationWithClientMutationId({
   },
 });
 
+export const deleteCategoryInputFields = {
+  category: {
+    description: 'Category ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+};
+
+const deleteCategory = mutationWithClientMutationId({
+  description: 'Delete a category.',
+  name: 'DeleteCategory',
+  inputFields: deleteCategoryInputFields,
+  outputFields: { category: { type: CategoryType } },
+  mutateAndGetPayload: async (input, context) => {
+    context.isAuthorized(['admin']);
+    await isDeleteValid(input);
+    return CategoryController.delete(input, context);
+  },
+});
+
 export default {
   createCategory,
   associateCategories,
   updateCategory,
+  deleteCategory,
 };
