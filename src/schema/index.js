@@ -24,6 +24,7 @@ import paymentTypeMutation from './paymentType/mutation';
 import pictureMutation from './picture/mutation';
 import personMutation from './person/mutation';
 import languageMutation from './language/mutation';
+import translationMutation from './translation/mutation';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -57,6 +58,7 @@ export default new GraphQLSchema({
       ...pictureMutation,
       ...personMutation,
       ...languageMutation,
+      ...translationMutation,
     },
   }),
 });
