@@ -8,62 +8,45 @@ import {
 } from 'graphql-relay';
 
 import db from '../../services/db';
-import CategoryType from './index';
+import LanguageType from './index';
 
-import CategoryController from '../../controllers/CategoryController';
+import LanguageController from '../../controllers/LanguageController';
 
-const category = {
-  description: 'Fetches a category given its ID or slug.',
-  type: CategoryType,
+const language = {
+  description: 'Fetches a language given its ID or slug.',
+  type: LanguageType,
   args: {
     id: {
       type: GraphQLString,
     },
-    slug: {
-      type: GraphQLString,
-    },
   },
   async resolve(_root, args, context) {
-    const { id, slug } = args;
+    const { id } = args;
 
-    let category;
+    let language;
 
     if (id) {
-      category = await CategoryController.getByParam(
+      language = await LanguageController.getByParam(
         'id', 
         fromGlobalId(id).id
       );
       
-      if (!category) {
-        throw new Error('Category not found.');
+      if (!language) {
+        throw new Error('Language not found.');
       }
 
-      return context.categoryById.load(category.id);
-    }
-
-    if (slug) {
-      category = await CategoryController.getByParam(
-        'slug', 
-        slug
-      );
-      
-      if (!category) {
-        return null
-      }
-      else {
-        return context.categoryById.load(category.id);
-      }
+      return context.languageById.load(language.id);
     }
     
     return null;
   },
 };
 
-const categories = {
-  description: 'Fetches business categories.',
+const languages = {
+  description: 'Fetches system languages.',
   type: connectionDefinitions({
-    name: 'Category',
-    nodeType: CategoryType,
+    name: 'Language',
+    nodeType: LanguageType,
     connectionFields: {
       totalCount: { type: new GraphQLNonNull(GraphQLInt) },
     },
@@ -75,16 +58,15 @@ const categories = {
 
     const [data, totalCount] = await Promise.all([
       db
-        .table('category')
-        .orderBy('priority', 'desc')
+        .table('language')
         .limit(limit)
         .offset(offset)
         .then(rows => {
-          rows.forEach(x => ctx.categoryById.prime(x.id, x));
+          rows.forEach(x => ctx.languageById.prime(x.id, x));
           return rows;
         }),
       db
-        .table('category')
+        .table('language')
         .count()
         .then(x => x[0].count),
     ]);
@@ -100,6 +82,6 @@ const categories = {
 };
 
 export default {
-  categories,
-  category,
+  language,
+  languages,
 };

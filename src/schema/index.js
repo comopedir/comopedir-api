@@ -9,6 +9,7 @@ import businessQueries from './business/queries';
 import channelQueries from './channel/queries';
 import networkQueries from './network/queries';
 import paymentTypeQueries from './paymentType/queries';
+import languageQueries from './language/queries';
 import accountQueries from './account/queries';
 
 import airtableBusinessMutation from './airtableBusiness/mutation';
@@ -22,6 +23,8 @@ import networkMutation from './network/mutation';
 import paymentTypeMutation from './paymentType/mutation';
 import pictureMutation from './picture/mutation';
 import personMutation from './person/mutation';
+import languageMutation from './language/mutation';
+import translationMutation from './translation/mutation';
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -36,6 +39,7 @@ export default new GraphQLSchema({
       ...channelQueries,
       ...networkQueries,
       ...paymentTypeQueries,
+      ...languageQueries,
       ...accountQueries,
     },
   }),
@@ -53,6 +57,8 @@ export default new GraphQLSchema({
       ...paymentTypeMutation,
       ...pictureMutation,
       ...personMutation,
+      ...languageMutation,
+      ...translationMutation,
     },
   }),
 });

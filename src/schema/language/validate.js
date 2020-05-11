@@ -1,21 +1,14 @@
 import * as yup from 'yup';
 
 const createSchema = yup.object().shape({
-  slug: yup.string().required(),
-  priority: yup.number().required(),
+  name: yup.string().required(),
+  isoCode: yup.string().required(),
 });
 
 const isCreateValid = obj => createSchema.validate(obj);
 
-const associateSchema = yup.object().shape({
-  business: yup.string().required(),
-  categories: yup.array().nullable(),
-});
-
-const isAssociateValid = obj => associateSchema.validate(obj);
-
 const updateSchema = yup.object().shape({
-  category: yup.string().required(),
+  language: yup.string().required(),
   field: yup.string().required(),
   value: yup.string().nullable(),
 });
@@ -23,14 +16,13 @@ const updateSchema = yup.object().shape({
 const isUpdateValid = obj => updateSchema.validate(obj);
 
 const deleteSchema = yup.object().shape({
-  category: yup.string().required(),
+  language: yup.string().required(),
 });
 
 const isDeleteValid = obj => deleteSchema.validate(obj);
 
 export {
   isCreateValid,
-  isAssociateValid,
   isUpdateValid,
   isDeleteValid,
 }

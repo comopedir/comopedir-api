@@ -1,6 +1,6 @@
-import { fromGlobalId } from 'graphql-relay';
 import { GraphQLNonNull, GraphQLInt, GraphQLString, GraphQLID, GraphQLBoolean } from 'graphql';
 import {
+  fromGlobalId,
   connectionDefinitions,
   connectionFromArraySlice,
   cursorToOffset,
@@ -12,7 +12,7 @@ import BusinessType from './index';
 import BusinessController from '../../controllers/BusinessController';
 
 const business = {
-  description: 'Fetches a business given its ID.',
+  description: 'Fetches a business given its ID, airtable ID or slug.',
   type: BusinessType,
   args: {
     id: {

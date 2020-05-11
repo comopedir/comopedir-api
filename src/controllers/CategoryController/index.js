@@ -109,5 +109,50 @@ const CategoryController = {
       return err;
     }
   },
+
+  update: async (input, context) => {
+    await context.isAuthorized(['admin']);
+
+    try {
+      const { category: categoryId, field, value } = input;
+
+      let updateField;
+      updateField = '';
+
+      let category = await CategoryController.getByParam(
+        'id',
+        fromGlobalId(categoryId).id,
+      );
+      
+      if (!category) throw new Error('Category does not exist.');
+
+      const updatePayload = {};
+
+      switch (field) {
+        case 'slug':
+          updateField = 'slug';
+          updatePayload[updateField] = value;
+          break;
+        case 'priority':
+          updateField = 'priority';
+          updatePayload[updateField] = value;
+          break;
+        default:
+          throw new Error('Access denied.');
+      }
+
+      category = await db
+        .table('category')
+        .update(updatePayload)
+        .where({ id: category.id })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      return { category: { ...category } };
+    } catch (err) {
+      console.error(err);
+      throw new Error('Error updating category data.');
+    }
+  },
 };
 export default CategoryController;
