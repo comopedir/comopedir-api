@@ -2,7 +2,7 @@ import { mutationWithClientMutationId } from 'graphql-relay';
 import { GraphQLNonNull, GraphQLString, GraphQLID } from 'graphql';
 import TranslationController from '../../controllers/TranslationController';
 
-import { isCreateCategoryValid, isDeleteValid } from './validate';
+import { isCreateCategoryValid, isDeleteValid, isUpdateValid } from './validate';
 import TranslationType from './index';
 
 export const categoryTranslationInputFields = {
@@ -42,6 +42,33 @@ export const deleteTranslationInputFields = {
   },
 };
 
+export const updateTranslationInputFields = {
+  translation: {
+    description: 'Translation ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  name: {
+    description: 'Translation name.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  description: {
+    description: 'Translation description.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+};
+
+const updateTranslation = mutationWithClientMutationId({
+  description: 'Update a translation.',
+  name: 'UpdateTranslation',
+  inputFields: updateTranslationInputFields,
+  outputFields: { translation: { type: TranslationType } },
+  mutateAndGetPayload: async (input, context) => {
+    context.isAuthorized(['admin']);
+    await isUpdateValid(input);
+    return TranslationController.update(input, context);
+  },
+});
+
 const deleteTranslation = mutationWithClientMutationId({
   description: 'Delete a translation.',
   name: 'DeleteTranslation',
@@ -56,5 +83,6 @@ const deleteTranslation = mutationWithClientMutationId({
 
 export default {
   createCategoryTranslation,
+  updateTranslation,
   deleteTranslation,
 };

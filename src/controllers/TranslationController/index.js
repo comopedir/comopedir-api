@@ -76,6 +76,42 @@ const TranslationController = {
     }
   },
 
+  update: async (input) => {
+    const trx = await db.transaction();
+
+    const {
+      translation: translationId,
+      name,
+      description
+    } = input;
+
+    let translation = await TranslationController.getByParamWithTransaction(
+      'id', 
+      fromGlobalId(translationId).id,
+      trx
+    );
+    if (!translation) throw new Error('Translation does not exist.');
+
+    try {
+      translation = await db
+        .table('translation')
+        .update({
+          name,
+          description
+        })
+        .where({ id: translation.id })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      await trx.commit();
+
+      return { translation: { ...translation } };
+    } catch (err) {
+      await trx.rollback();
+      return err;
+    }
+  },
+
   delete: async (input, context) => {
     const trx = await db.transaction();
 
