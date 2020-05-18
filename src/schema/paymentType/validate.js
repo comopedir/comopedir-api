@@ -14,8 +14,24 @@ const associateSchema = yup.object().shape({
 
 const isAssociateValid = obj => associateSchema.validate(obj);
 
+const updateSchema = yup.object().shape({
+  paymentType: yup.string().required(),
+  field: yup.string().required(),
+  value: yup.string().nullable(),
+});
+
+const isUpdateValid = obj => updateSchema.validate(obj);
+
+const deleteSchema = yup.object().shape({
+  category: yup.string().required(),
+});
+
+const isDeleteValid = obj => deleteSchema.validate(obj);
+
 
 export {
   isCreateValid,
-  isAssociateValid
+  isAssociateValid,
+  isUpdateValid,
+  isDeleteValid,
 }

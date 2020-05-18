@@ -1,13 +1,64 @@
-import { GraphQLNonNull, GraphQLInt } from 'graphql';
+import { GraphQLNonNull, GraphQLInt, GraphQLString } from 'graphql';
 import {
   connectionDefinitions,
   forwardConnectionArgs,
   connectionFromArraySlice,
   cursorToOffset,
+  fromGlobalId,
 } from 'graphql-relay';
 
 import db from '../../services/db';
 import PaymentType from './index';
+
+import PaymentTypeController from '../../controllers/PaymentTypeController';
+
+const paymentType = {
+  description: 'Fetches a payment given its ID or slug.',
+  type: PaymentType,
+  args: {
+    id: {
+      type: GraphQLString,
+    },
+    slug: {
+      type: GraphQLString,
+    },
+  },
+  async resolve(_root, args, context) {
+    const { id, slug } = args;
+
+    let paymentType;
+
+    if (id) {
+      paymentType = await PaymentTypeController.getByParam(
+        'id', 
+        fromGlobalId(id).id
+      );
+      
+      if (!paymentType) {
+        throw new Error('Payment type not found.');
+      }
+
+      return context.paymentTypeById.load(paymentType.id);
+    }
+
+    if (slug) {
+      paymentType = await PaymentTypeController.getByParam(
+        'slug', 
+        slug
+      );
+      
+      if (!paymentType) {
+        return null
+      }
+      else {
+        return context.paymentTypeById.load(paymentType.id);
+      }
+    }
+    
+    return null;
+  },
+};
+
 
 const paymentTypes = {
   description: 'Fetches business payment types.',
@@ -50,5 +101,6 @@ const paymentTypes = {
 };
 
 export default {
+  paymentType,
   paymentTypes,
 };

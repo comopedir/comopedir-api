@@ -107,5 +107,50 @@ const PaymentTypeController = {
       return err;
     }
   },
+
+  update: async (input, context) => {
+    await context.isAuthorized(['admin']);
+
+    try {
+      const { paymentType: paymentTypeId, field, value } = input;
+
+      let updateField;
+      updateField = '';
+
+      let paymentType = await PaymentTypeController.getByParam(
+        'id',
+        fromGlobalId(paymentTypeId).id,
+      );
+      
+      if (!paymentType) throw new Error('Payment type does not exist.');
+
+      const updatePayload = {};
+
+      switch (field) {
+        case 'slug':
+          updateField = 'slug';
+          updatePayload[updateField] = value;
+          break;
+        case 'priority':
+          updateField = 'priority';
+          updatePayload[updateField] = value;
+          break;
+        default:
+          throw new Error('Access denied.');
+      }
+
+      paymentType = await db
+        .table('payment_type')
+        .update(updatePayload)
+        .where({ id: paymentType.id })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      return { paymentType: { ...paymentType } };
+    } catch (err) {
+      console.error(err);
+      throw new Error('Error updating payment type data.');
+    }
+  },
 };
 export default PaymentTypeController;
