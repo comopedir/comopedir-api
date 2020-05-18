@@ -8,7 +8,7 @@ module.exports.up = async db => {
     table
       .uuid('payment_type')
       .references('id')
-      .inTable('service')
+      .inTable('payment_type')
       .notNullable();
     table
       .uuid('translation')
