@@ -4,6 +4,7 @@ import db from '../../services/db';
 
 import LanguageController from '../LanguageController';
 import CategoryController from '../CategoryController';
+import PaymentTypeController from '../PaymentTypeController';
 
 const TranslationController = {
   getByParam: async (key, value) =>
@@ -62,6 +63,61 @@ const TranslationController = {
         .transacting(trx)
         .insert({
           category: category.id,
+          translation: translation.id,
+        })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      await trx.commit();
+
+      return { translation: { ...translation } };
+    } catch (err) {
+      await trx.rollback();
+      return err;
+    }
+  },
+
+  createPaymentTypeTranslation: async (input) => {
+    const trx = await db.transaction();
+
+    const {
+      language: languageId,
+      paymentType: paymentTypeId,
+      name,
+      description
+    } = input;
+
+    let language = await LanguageController.getByParamWithTransaction(
+      'id', 
+      fromGlobalId(languageId).id,
+      trx
+    );
+    if (!language) throw new Error('Language does not exist.');
+
+    let paymentType = await PaymentTypeController.getByParamWithTransaction(
+      'id', 
+      fromGlobalId(paymentTypeId).id,
+      trx
+    );
+    if (!paymentType) throw new Error('Payment type does not exist.');
+
+    try {
+      const translation = await db
+        .table('translation')
+        .transacting(trx)
+        .insert({
+          language: language.id,
+          name,
+          description,
+        })
+        .returning('*')
+        .then(rows => rows[0]);
+
+      await db
+        .table('payment_type_translation')
+        .transacting(trx)
+        .insert({
+          payment_type: paymentType.id,
           translation: translation.id,
         })
         .returning('*')

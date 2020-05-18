@@ -2,7 +2,12 @@ import { mutationWithClientMutationId } from 'graphql-relay';
 import { GraphQLNonNull, GraphQLString, GraphQLID } from 'graphql';
 import TranslationController from '../../controllers/TranslationController';
 
-import { isCreateCategoryValid, isDeleteValid, isUpdateValid } from './validate';
+import {
+  isCreateCategoryValid,
+  isCreatePaymentTypeValid,
+  isDeleteValid,
+  isUpdateValid,
+} from './validate';
 import TranslationType from './index';
 
 export const categoryTranslationInputFields = {
@@ -32,6 +37,36 @@ const createCategoryTranslation = mutationWithClientMutationId({
   mutateAndGetPayload: async (input, _context) => {
     await isCreateCategoryValid(input);
     return TranslationController.createCategoryTranslation(input);
+  },
+});
+
+export const paymentTypeTranslationInputFields = {
+  language: {
+    description: 'Translation language ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  paymentType: {
+    description: 'Translation payment type ID.',
+    type: new GraphQLNonNull(GraphQLID),
+  },
+  name: {
+    description: 'Translation name.',
+    type: new GraphQLNonNull(GraphQLString),
+  },
+  description: {
+    description: 'Translation description.',
+    type: GraphQLString,
+  },
+};
+
+const createPaymentTypeTranslation = mutationWithClientMutationId({
+  description: 'Create a translation for a payment type.',
+  name: 'CreatePaymentTypeTranslation',
+  inputFields: paymentTypeTranslationInputFields,
+  outputFields: { translation: { type: TranslationType } },
+  mutateAndGetPayload: async (input, _context) => {
+    await isCreatePaymentTypeValid(input);
+    return TranslationController.createPaymentTypeTranslation(input);
   },
 });
 
@@ -83,6 +118,7 @@ const deleteTranslation = mutationWithClientMutationId({
 
 export default {
   createCategoryTranslation,
+  createPaymentTypeTranslation,
   updateTranslation,
   deleteTranslation,
 };

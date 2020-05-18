@@ -9,6 +9,15 @@ const createCategorySchema = yup.object().shape({
 
 const isCreateCategoryValid = obj => createCategorySchema.validate(obj);
 
+const createPaymentTypeSchema = yup.object().shape({
+  language: yup.string().required(),
+  paymentType: yup.string().required(),
+  name: yup.string().required(),
+  description: yup.string().nullable(),
+});
+
+const isCreatePaymentTypeValid = obj => createPaymentTypeSchema.validate(obj);
+
 const updateSchema = yup.object().shape({
   translation: yup.string().required(),
   name: yup.string().required(),
@@ -25,6 +34,7 @@ const isDeleteValid = obj => deleteSchema.validate(obj);
 
 export {
   isCreateCategoryValid,
+  isCreatePaymentTypeValid,
   isUpdateValid,
   isDeleteValid,
 }
